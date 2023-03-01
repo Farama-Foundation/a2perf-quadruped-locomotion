@@ -24,6 +24,11 @@ Install dependencies:
 
 and it should be good to go.
 
+## Docker Install
+
+Build Docker
+``TBD``
+
 ## Training Imitation Models
 
 To train a policy, run the following command:
