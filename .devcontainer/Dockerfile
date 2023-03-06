@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y wget \
     libsm6 \
     libxext6
 
+# Python Packages
 RUN pip install attrs==19.3.0
 RUN pip install gym==0.17.1
 RUN pip install mpi4py==3.0.3
@@ -49,7 +50,9 @@ RUN pip install numba
 RUN pip install quadprog
 RUN pip install inputs
 RUN pip install protobuf==3.20.*
+RUN pip install gin-config
 
+# Add User for safely using mpi4py
 RUN useradd -m newuser 
 RUN echo 'newuser:mypassword' | chpasswd
 RUN usermod -aG sudo newuser
