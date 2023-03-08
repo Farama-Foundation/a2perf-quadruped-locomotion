@@ -29,10 +29,10 @@ import logging
 import os
 import numpy as np
 
-from motion_imitation.envs.env_wrappers import imitation_terminal_conditions
-from motion_imitation.utilities import pose3d
-from motion_imitation.utilities import motion_data
-from motion_imitation.utilities import motion_util
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_terminal_conditions
+from rl_perf.domains.quadruped_locomotion.motion_imitation.utilities import pose3d
+from rl_perf.domains.quadruped_locomotion.motion_imitation.utilities import motion_data
+from rl_perf.domains.quadruped_locomotion.motion_imitation.utilities import motion_util
 from pybullet_utils import transformations
 
 

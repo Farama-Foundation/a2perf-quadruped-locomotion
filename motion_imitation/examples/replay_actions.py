@@ -8,10 +8,10 @@ import pybullet_data
 from pybullet_utils import bullet_client
 import time
 
-# from motion_imitation.robots import a1
-from motion_imitation.robots import a1_robot
-# from motion_imitation.envs import env_builder
-from motion_imitation.robots import robot_config
+# from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1_robot
+# from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 flags.DEFINE_string('traj_dir', None, 'directory of trajectory file.')
 FLAGS = flags.FLAGS

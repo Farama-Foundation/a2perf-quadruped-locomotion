@@ -17,10 +17,10 @@ from absl import logging
 import numpy as np
 import pybullet as p  # pytype: disable=import-error
 
-from motion_imitation.envs import env_builder
-from motion_imitation.robots import a1
-from motion_imitation.robots import a1_robot
-from motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1_robot
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 
 def main(_):

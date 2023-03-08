@@ -31,8 +31,8 @@ import random
 import numpy as np
 import six
 import tensorflow.compat.v1 as tf
-from motion_imitation.envs.utilities import env_randomizer_base
-from motion_imitation.envs.utilities import minitaur_env_randomizer_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import env_randomizer_base
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import minitaur_env_randomizer_config
 
 SIMULATION_TIME_STEP = 0.001
 

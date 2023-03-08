@@ -21,8 +21,8 @@ import time
 import pybullet
 import random
 
-from motion_imitation.envs import env_builder as env_builder
-from motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 from mpc_controller import com_velocity_estimator
 from mpc_controller import gait_generator as gait_generator_lib

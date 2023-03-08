@@ -29,7 +29,7 @@ os.sys.path.insert(0, parentdir)
 import random
 import numpy as np
 from six.moves import range
-from motion_imitation.envs.utilities import env_randomizer_base
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import env_randomizer_base
 
 # Relative range.
 MINITAUR_BASE_MASS_ERROR_RANGE = (-0.2, 0.2)  # 0.2 means 20%

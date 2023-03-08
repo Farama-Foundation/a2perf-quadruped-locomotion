@@ -1,9 +1,9 @@
-from motion_imitation import run_utils
+from rl_perf.domains.quadruped_locomotion.motion_imitation import run_utils
 
 run_utils.QuadrupedLocomotionEnv.seed=None
 run_utils.QuadrupedLocomotionEnv.benchmark=False
 run_utils.QuadrupedLocomotionEnv.mode="train"
-run_utils.QuadrupedLocomotionEnv.motion_file="motion_imitation/data/motions/dog_pace.txt"
+#run_utils.QuadrupedLocomotionEnv.motion_file="../domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt"
 run_utils.QuadrupedLocomotionEnv.visualize=False
 run_utils.QuadrupedLocomotionEnv.output_dir="output"
 run_utils.QuadrupedLocomotionEnv.num_test_episodes=None

@@ -29,7 +29,7 @@ import numpy as np
 import typing
 
 from robots import minitaur_pose_utils
-from motion_imitation.envs.sensors import sensor
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor
 
 _ARRAY = typing.Iterable[float] #pylint: disable=invalid-name
 _FLOAT_OR_ARRAY = typing.Union[float, _ARRAY] #pylint: disable=invalid-name

@@ -1,5 +1,6 @@
 import os
 import inspect
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 os.sys.path.insert(0, parentdir)
@@ -14,9 +15,9 @@ import time
 import gym
 import gin
 
-from motion_imitation.envs import env_builder as env_builder
-from motion_imitation.learning import imitation_policies as imitation_policies
-from motion_imitation.learning import ppo_imitation as ppo_imitation
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import imitation_policies as imitation_policies
+from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import ppo_imitation as ppo_imitation
 
 from stable_baselines.common.callbacks import CheckpointCallback
 
@@ -26,23 +27,25 @@ OPTIM_BATCHSIZE = 256
 ENABLE_ENV_RANDOMIZER = True
 
 """Wrapper to make the environment suitable for OpenAI gym."""
+
+
 @gin.configurable('QuadrupedLocomotionEnv')
 class RunUtils(gym.Env):
-    def __init__(self, 
-                 seed=None, 
-                 benchmark=False, 
-                 mode="train", 
-                 motion_file="motion_imitation/data/motions/dog_pace.txt", 
-                 visualize=False, 
-                 output_dir="output", 
-                 num_test_episodes=None, 
-                 model_file="", 
-                 total_timesteps=2e8, 
+    def __init__(self,
+                 seed=None,
+                 benchmark=False,
+                 mode="train",
+                 motion_file="motion_imitation/data/motions/dog_pace.txt",
+                 visualize=False,
+                 output_dir="output",
+                 num_test_episodes=None,
+                 model_file="",
+                 total_timesteps=2e8,
                  int_save_freq=0):
 
         self._seed = seed
         self._benchmark = benchmark
-        self._mode = mode 
+        self._mode = mode
         self._motion_file = motion_file
         self._visualize = visualize
         self._output_dir = output_dir
@@ -70,13 +73,12 @@ class RunUtils(gym.Env):
         '''Build Environment'''
         enable_env_rand = ENABLE_ENV_RANDOMIZER and (self._mode != "test")
         env = env_builder.build_imitation_env(motion_files=[self._motion_file],
-                                                num_parallel_envs=self._num_procs,
-                                                mode=self._mode,
-                                                enable_randomizer=enable_env_rand,
-                                                enable_rendering=self._visualize)
+                                              num_parallel_envs=self._num_procs,
+                                              mode=self._mode,
+                                              enable_randomizer=enable_env_rand,
+                                              enable_rendering=self._visualize)
         return env
-    
-      
+
     def set_rand_seed(self, seed=None):
         if seed is None:
             seed = int(time.time())
@@ -91,35 +93,34 @@ class RunUtils(gym.Env):
 
     def build_model(self, env, timesteps_per_actorbatch, optim_batchsize):
         policy_kwargs = {
-            "net_arch": [{"pi": [512, 256],
-                            "vf": [512, 256]}],
-            "act_fun": tf.nn.relu
-        }
+                "net_arch": [{"pi": [512, 256],
+                              "vf": [512, 256]}],
+                "act_fun": tf.nn.relu
+                }
 
         timesteps_per_actorbatch = int(np.ceil(float(timesteps_per_actorbatch) / self._num_procs))
         optim_batchsize = int(np.ceil(float(optim_batchsize) / self._num_procs))
 
         model = ppo_imitation.PPOImitation(
-                    policy=imitation_policies.ImitationPolicy,
-                    env=env,
-                    gamma=0.95,
-                    timesteps_per_actorbatch=timesteps_per_actorbatch,
-                    clip_param=0.2,
-                    optim_epochs=1,
-                    optim_stepsize=1e-5,
-                    optim_batchsize=optim_batchsize,
-                    lam=0.95,
-                    adam_epsilon=1e-5,
-                    schedule='constant',
-                    policy_kwargs=policy_kwargs,
-                    tensorboard_log=self._output_dir,
-                    verbose=1)
-        
+                policy=imitation_policies.ImitationPolicy,
+                env=env,
+                gamma=0.95,
+                timesteps_per_actorbatch=timesteps_per_actorbatch,
+                clip_param=0.2,
+                optim_epochs=1,
+                optim_stepsize=1e-5,
+                optim_batchsize=optim_batchsize,
+                lam=0.95,
+                adam_epsilon=1e-5,
+                schedule='constant',
+                policy_kwargs=policy_kwargs,
+                tensorboard_log=self._output_dir,
+                verbose=1)
+
         if self._model_file != "":
             model.load_parameters(self._model_file)
 
         return model
-
 
     def train(self, model, env):
         if (self._output_dir == ""):
@@ -128,7 +129,6 @@ class RunUtils(gym.Env):
             save_path = os.path.join(self._output_dir, "model.zip")
             if not os.path.exists(self._output_dir):
                 os.makedirs(self._output_dir)
-        
 
         callbacks = []
         # Save a checkpoint every n steps
@@ -176,12 +176,12 @@ class RunUtils(gym.Env):
 
     def get_built_env(self):
         return self._built_env
-    
+
     def get_built_model(self):
         return self._built_model
-    
+
     def build_new_env(self):
-        '''Build enironment'''     
+        '''Build enironment'''
         self._built_env = self.build_environment()
 
     def build_new_model(self):
@@ -209,27 +209,29 @@ if __name__ == '__main__':
     arg_parser.add_argument("--seed", dest="seed", type=int, default=None)
     arg_parser.add_argument("--benchmark", dest="benchmark", action="store_true", default=False)
     arg_parser.add_argument("--mode", dest="mode", type=str, default="train")
-    arg_parser.add_argument("--motion_file", dest="motion_file", type=str, default="motion_imitation/data/motions/dog_pace.txt")
+    arg_parser.add_argument("--motion_file", dest="motion_file", type=str,
+                            default="motion_imitation/data/motions/dog_pace.txt")
     arg_parser.add_argument("--visualize", dest="visualize", action="store_true", default=False)
     arg_parser.add_argument("--output_dir", dest="output_dir", type=str, default="output")
     arg_parser.add_argument("--num_test_episodes", dest="num_test_episodes", type=int, default=None)
     arg_parser.add_argument("--model_file", dest="model_file", type=str, default="")
     arg_parser.add_argument("--total_timesteps", dest="total_timesteps", type=int, default=2e8)
-    arg_parser.add_argument("--int_save_freq", dest="int_save_freq", type=int, default=0) # save intermediate model every n policy steps
+    arg_parser.add_argument("--int_save_freq", dest="int_save_freq", type=int,
+                            default=0)  # save intermediate model every n policy steps
 
     args = arg_parser.parse_args()
 
-    run = RunUtils(seed=args.seed, 
-                 benchmark=args.benchmark, 
-                 mode=args.mode, 
-                 motion_file=args.motion_file, 
-                 visualize=args.visualize, 
-                 output_dir=args.output_dir, 
-                 num_test_episodes=args.num_test_episodes, 
-                 model_file=args.model_file, 
-                 total_timesteps=args.total_timesteps, 
-                 int_save_freq=args.int_save_freq)
-    
+    run = RunUtils(seed=args.seed,
+                   benchmark=args.benchmark,
+                   mode=args.mode,
+                   motion_file=args.motion_file,
+                   visualize=args.visualize,
+                   output_dir=args.output_dir,
+                   num_test_episodes=args.num_test_episodes,
+                   model_file=args.model_file,
+                   total_timesteps=args.total_timesteps,
+                   int_save_freq=args.int_save_freq)
+
     # env = run.build_environment()
     # model = run.build_model(env, TIMESTEPS_PER_ACTORBATCH, OPTIM_BATCHSIZE)
     # run.test(model, env)

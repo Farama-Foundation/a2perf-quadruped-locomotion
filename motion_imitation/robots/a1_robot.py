@@ -28,12 +28,12 @@ import re
 import numpy as np
 import time
 
-from motion_imitation.robots import laikago_pose_utils
-from motion_imitation.robots import a1
-from motion_imitation.robots import a1_robot_velocity_estimator
-from motion_imitation.robots import minitaur
-from motion_imitation.robots import robot_config
-from motion_imitation.envs import locomotion_gym_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_pose_utils
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1_robot_velocity_estimator
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_config
 from robot_interface import RobotInterface  # pytype: disable=import-error
 
 NUM_MOTORS = 12

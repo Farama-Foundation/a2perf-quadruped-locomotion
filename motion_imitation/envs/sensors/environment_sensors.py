@@ -28,7 +28,7 @@ os.sys.path.insert(0, parentdir)
 import numpy as np
 import typing
 
-from motion_imitation.envs.sensors import sensor
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor
 
 _ARRAY = typing.Iterable[float] # pylint:disable=invalid-name
 _FLOAT_OR_ARRAY = typing.Union[float, _ARRAY] # pylint:disable=invalid-name

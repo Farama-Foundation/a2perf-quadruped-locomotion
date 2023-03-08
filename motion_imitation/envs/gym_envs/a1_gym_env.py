@@ -1,9 +1,9 @@
 """Wrapper to make the a1 environment suitable for OpenAI gym."""
 import gym
 
-from motion_imitation.envs import env_builder
-from motion_imitation.robots import a1
-from motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 
 class A1GymEnv(gym.Env):

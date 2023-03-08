@@ -14,7 +14,7 @@
 # limitations under the License.
 """An env wrapper that flattens the observation dictionary to an array."""
 import gym
-from motion_imitation.envs.utilities import env_utils
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import env_utils
 
 
 class ObservationDictionaryToArrayWrapper(gym.Env):

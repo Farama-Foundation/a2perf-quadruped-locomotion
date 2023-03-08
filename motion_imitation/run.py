@@ -15,9 +15,9 @@
 
 import os
 import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-os.sys.path.insert(0, parentdir)
+# currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+# parentdir = os.path.dirname(currentdir)
+# os.sys.path.insert(0, parentdir)
 
 import argparse
 from mpi4py import MPI
@@ -27,9 +27,9 @@ import random
 import tensorflow as tf
 import time
 
-from motion_imitation.envs import env_builder as env_builder
-from motion_imitation.learning import imitation_policies as imitation_policies
-from motion_imitation.learning import ppo_imitation as ppo_imitation
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import imitation_policies as imitation_policies
+from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import ppo_imitation as ppo_imitation
 
 from stable_baselines.common.callbacks import CheckpointCallback
 
@@ -114,7 +114,7 @@ def test(model, env, num_procs, num_episodes=None):
     a, _ = model.predict(o, deterministic=True)
     o, r, done, info = env.step(a)
     curr_return += r
-
+    print(a)
     if done:
         o = env.reset()
         sum_return += curr_return

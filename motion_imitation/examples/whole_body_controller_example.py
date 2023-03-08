@@ -28,9 +28,9 @@ from mpc_controller import raibert_swing_leg_controller
 from mpc_controller import torque_stance_leg_controller_quadprog as torque_stance_leg_controller
 
 
-from motion_imitation.robots import a1
-from motion_imitation.robots import robot_config
-from motion_imitation.robots.gamepad import gamepad_reader
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots.gamepad import gamepad_reader
 
 flags.DEFINE_string("logdir", None, "where to log trajectories.")
 flags.DEFINE_bool("use_gamepad", False,
@@ -169,7 +169,7 @@ def main(argv):
 
   # Construct robot class:
   if FLAGS.use_real_robot:
-    from motion_imitation.robots import a1_robot
+    from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1_robot
     robot = a1_robot.A1Robot(
         pybullet_client=p,
         motor_control_mode=robot_config.MotorControlMode.HYBRID,

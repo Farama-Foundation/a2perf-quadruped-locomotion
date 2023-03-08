@@ -25,10 +25,10 @@ import os
 import random
 import time
 
-from motion_imitation.envs import env_builder as env_builder
-from motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
-from motion_imitation.robots import laikago
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago
 
 def test(env):
   o = env.reset()

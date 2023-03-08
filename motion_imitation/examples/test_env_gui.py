@@ -12,10 +12,10 @@ import numpy as np
 from tqdm import tqdm
 import pybullet as p  # pytype: disable=import-error
 
-from motion_imitation.envs import env_builder
-from motion_imitation.robots import a1
-from motion_imitation.robots import laikago
-from motion_imitation.robots import robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 FLAGS = flags.FLAGS
 flags.DEFINE_enum('robot_type', 'A1', ['A1', 'Laikago'], 'Robot Type.')
