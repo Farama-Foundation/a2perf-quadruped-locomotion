@@ -6,9 +6,11 @@
 	
 	"build": {
 		//Path is relative to the devcontainer.json file
-		"dockerfile": "Dockerfile", 
+		"dockerfile": "../docker/Dockerfile", 
 		"context": ".."
-	}
+	},
+
+	"runArgs": ["--privileged"], 
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -17,7 +19,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "python setup.py install --user"
+	"postCreateCommand": "python -m pip install -e ."
 
 	// Configure tool-specific properties.
 	// "customizations": {},

@@ -1,7 +1,7 @@
 import gin
 import gym
 
-gin.parse_config_files_and_bindings(["../domains/quadruped_locomotion/motion_imitation/configs/envdesign.gin"], None,
+gin.parse_config_files_and_bindings(["../rl_perf/domains/quadruped_locomotion/motion_imitation/configs/envdesign.gin"], None,
                                     finalize_config=False)
 
 gym.envs.register(

@@ -53,6 +53,9 @@ class RunUtils(gym.Env):
         self._model_file = model_file
         self._total_timesteps = total_timesteps
         self._int_save_freq = int_save_freq
+        
+        print("HIIIIIIIII\n\n\n\n\n\n")
+        print(self._model_file)
 
         if self._mode not in ['train', 'test']:
             assert False, "Unsupported mode: " + args.mode
@@ -210,7 +213,7 @@ if __name__ == '__main__':
     arg_parser.add_argument("--benchmark", dest="benchmark", action="store_true", default=False)
     arg_parser.add_argument("--mode", dest="mode", type=str, default="train")
     arg_parser.add_argument("--motion_file", dest="motion_file", type=str,
-                            default="motion_imitation/data/motions/dog_pace.txt")
+                            default="domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt")
     arg_parser.add_argument("--visualize", dest="visualize", action="store_true", default=False)
     arg_parser.add_argument("--output_dir", dest="output_dir", type=str, default="output")
     arg_parser.add_argument("--num_test_episodes", dest="num_test_episodes", type=int, default=None)

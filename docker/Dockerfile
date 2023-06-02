@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-ARG MOTION_IMITATION_DIR="../"
+
 ARG APT_COMMAND="apt-get -o Acquire::Retries=3 -y"
 
 # Installs basics including add-apt.
@@ -7,7 +7,6 @@ RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y --no-install-recommends \
         software-properties-common \
         curl \
         less
-
 
 # Install Python 3.7.11 and Pip
 RUN apt-get update && \
@@ -34,11 +33,7 @@ RUN apt-get update && apt-get install -y wget \
     g++ \
     ffmpeg \
     libsm6 \
-    libxext6\
-    htop
-
-RUN apt-get -y install ssh
-RUN apt-get -y install openssh-server
+    libxext6
 
 # Python Packages
 RUN pip install attrs==19.3.0
@@ -57,24 +52,13 @@ RUN pip install inputs
 RUN pip install protobuf==3.20.*
 RUN pip install gin-config
 
-# Create user (need a non-root user for running google-chrome without --no-sandbox)
-RUN useradd -ms /bin/bash user
-RUN usermod -aG sudo user
-RUN passwd -d user
+# Add User for safely using mpi4py
+RUN useradd -m newuser
+RUN echo 'newuser:mypassword' | chpasswd
+RUN usermod -aG sudo newuser
+USER newuser
+WORKDIR /home/newuser
+CMD ["bash"]
 
 
-# Enable X11 forwarding for docker
-RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config
-RUN echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config
 
-USER user
-RUN mkdir /home/user/.ssh
-RUN chmod 700 /home/user/.ssh
-RUN touch /home/user/.ssh/authorized_keys
-RUN chmod 600 /home/user/.ssh/authorized_keys
-
-ADD $MOTION_IMITATION_DIR/.ssh/id_rsa.pub /home/user/.ssh/authorized_keys
-
-EXPOSE 22
-
-ENTRYPOINT sudo service ssh start && exec bash
