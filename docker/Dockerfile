@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt-get install -y python3.7 python3.7-distutils python3.7-dev && \
+    apt-get install -y python3.7 python3.7-distutils python3.7-dev python3.7-venv && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1

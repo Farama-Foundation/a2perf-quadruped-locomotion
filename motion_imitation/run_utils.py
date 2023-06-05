@@ -53,9 +53,6 @@ class RunUtils(gym.Env):
         self._model_file = model_file
         self._total_timesteps = total_timesteps
         self._int_save_freq = int_save_freq
-        
-        print("HIIIIIIIII\n\n\n\n\n\n")
-        print(self._model_file)
 
         if self._mode not in ['train', 'test']:
             assert False, "Unsupported mode: " + args.mode
@@ -63,6 +60,9 @@ class RunUtils(gym.Env):
         self._num_procs = MPI.COMM_WORLD.Get_size()
         os.environ["CUDA_VISIBLE_DEVICES"] = '-1'
 
+        # Set seed
+        self.set_rand_seed(self._seed)
+        
         # Build enironment       
         self._built_env = self.build_environment()
 
@@ -223,7 +223,7 @@ if __name__ == '__main__':
                             default=0)  # save intermediate model every n policy steps
 
     args = arg_parser.parse_args()
-
+    
     run = RunUtils(seed=args.seed,
                    benchmark=args.benchmark,
                    mode=args.mode,
@@ -238,5 +238,7 @@ if __name__ == '__main__':
     # env = run.build_environment()
     # model = run.build_model(env, TIMESTEPS_PER_ACTORBATCH, OPTIM_BATCHSIZE)
     # run.test(model, env)
-
-    run.test(run.get_built_model(), run.get_built_env())
+    
+    # run.test(run.get_built_model(), run.get_built_env())
+    
+    run.train(run.get_built_model(), run.get_built_env())
