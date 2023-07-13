@@ -15,6 +15,8 @@
 
 import os
 import inspect
+import gin
+from mpi4py import MPI
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
@@ -41,7 +43,7 @@ from motion_imitation.robots import robot_config
 
 
 
-
+ENABLE_ENV_RANDOMIZER = True 
 
 def build_laikago_env( motor_control_mode, enable_rendering):
 
@@ -75,13 +77,21 @@ def build_laikago_env( motor_control_mode, enable_rendering):
 
   return env
 
-
-def build_imitation_env(motion_files, num_parallel_envs, mode,
-                        enable_randomizer, enable_rendering,
+@gin.configurable
+def build_imitation_env(motion_files, mode, enable_rendering,
+                        num_parallel_envs = None,
+                        enable_randomizer = None,
                         robot_class=laikago.Laikago,
                         trajectory_generator=simple_openloop.LaikagoPoseOffsetGenerator(action_limit=laikago.UPPER_BOUND)):
   assert len(motion_files) > 0
-
+  
+  if num_parallel_envs is None:
+    num_parallel_envs = MPI.COMM_WORLD.Get_size()
+    os.environ["CUDA_VISIBLE_DEVICES"] = '-1'
+  
+  if enable_randomizer is None:
+    enable_randomizer = ENABLE_ENV_RANDOMIZER and (mode != "test")
+        
   curriculum_episode_length_start = 20
   curriculum_episode_length_end = 600
   
