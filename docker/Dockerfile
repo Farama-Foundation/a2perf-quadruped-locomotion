@@ -1,6 +1,8 @@
 FROM ubuntu:20.04
 
 ARG APT_COMMAND="apt-get -o Acquire::Retries=3 -y"
+ARG USER_ID
+ARG USER_GROUP_ID
 
 # Installs basics including add-apt.
 RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y --no-install-recommends \
@@ -33,6 +35,9 @@ RUN apt-get update && apt-get install -y wget \
     g++ \
     ffmpeg \
     libsm6 \
+    htop \
+    ssh \
+    openssh-server \
     libxext6
 
 # Python Packages
@@ -52,13 +57,31 @@ RUN pip install inputs
 RUN pip install protobuf==3.20.*
 RUN pip install gin-config
 
+
+# Enable X11 forwarding for docker
+RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
+    echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config && \
+    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
+
 # Add User for safely using mpi4py
-RUN useradd -m newuser
-RUN echo 'newuser:mypassword' | chpasswd
-RUN usermod -aG sudo newuser
-USER newuser
-WORKDIR /home/newuser
-CMD ["bash"]
+RUN groupadd -g $USER_GROUP_ID user_group
+RUN groupadd -g 998 docker
+
+RUN useradd -u $USER_ID -g $USER_GROUP_ID -G 998 -ms /bin/bash user
+
+# Granting sudo privileges
+RUN usermod -aG sudo user
+RUN echo "user:password" | chpasswd
+RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+RUN mkdir /home/user/.ssh
+RUN chmod 700 /home/user/.ssh
+RUN touch /home/user/.ssh/authorized_keys
+RUN chmod 600 /home/user/.ssh/authorized_keys
+ADD .ssh/id_rsa.pub /home/user/.ssh/authorized_keys
+
+USER user
+
 
 
 
