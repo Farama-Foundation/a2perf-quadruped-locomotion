@@ -15,6 +15,7 @@
 
 import os
 import inspect
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
@@ -27,7 +28,7 @@ import tensorflow as tf
 from mpi4py import MPI
 
 from stable_baselines.common import Dataset, explained_variance, fmt_row, zipsame, ActorCriticRLModel, SetVerbosity, \
-  TensorboardWriter
+    TensorboardWriter
 from stable_baselines import logger
 import stable_baselines.common.tf_util as tf_util
 from stable_baselines.common.tf_util import total_episode_reward_logger
@@ -43,28 +44,29 @@ from rl_perf.domains.quadruped_locomotion.motion_imitation.learning.imitation_ru
 
 
 def add_vtarg_and_adv(seg, gamma, lam):
-  """
-  Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
+    """
+    Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
 
-  :param seg: (dict) the current segment of the trajectory (see traj_segment_generator return for more information)
-  :param gamma: (float) Discount factor
-  :param lam: (float) GAE factor
-  """
-  # last element is only used for last vtarg, but we already zeroed it if last new = 1
-  episode_starts = np.append(seg["episode_starts"], False)
-  vpred = seg["vpred"]
-  nexvpreds = seg["nextvpreds"]
-  rew_len = len(seg["rewards"])
-  seg["adv"] = np.empty(rew_len, 'float32')
-  rewards = seg["rewards"]
-  lastgaelam = 0
-  for step in reversed(range(rew_len)):
-    nonterminal = 1 - float(episode_starts[step + 1])
-    delta = rewards[step] + gamma * nexvpreds[step] - vpred[step]
-    seg["adv"][step] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam
-  seg["tdlamret"] = seg["adv"] + seg["vpred"]
+    :param seg: (dict) the current segment of the trajectory (see traj_segment_generator return for more information)
+    :param gamma: (float) Discount factor
+    :param lam: (float) GAE factor
+    """
+    # last element is only used for last vtarg, but we already zeroed it if last new = 1
+    episode_starts = np.append(seg["episode_starts"], False)
+    vpred = seg["vpred"]
+    nexvpreds = seg["nextvpreds"]
+    rew_len = len(seg["rewards"])
+    seg["adv"] = np.empty(rew_len, 'float32')
+    rewards = seg["rewards"]
+    lastgaelam = 0
+    for step in reversed(range(rew_len)):
+        nonterminal = 1 - float(episode_starts[step + 1])
+        delta = rewards[step] + gamma * nexvpreds[step] - vpred[step]
+        seg["adv"][step] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam
+    seg["tdlamret"] = seg["adv"] + seg["vpred"]
 
-  return
+    return
+
 
 class PPOImitation(pposgd_simple.PPO1):
     """
@@ -96,6 +98,7 @@ class PPOImitation(pposgd_simple.PPO1):
     :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations
         If None, the number of cpu of the current machine will be used.
     """
+
     def __init__(self, policy, env, gamma=0.99, timesteps_per_actorbatch=256, clip_param=0.2, entcoeff=0.01,
                  optim_epochs=4, optim_stepsize=1e-3, optim_batchsize=64, lam=0.95, adam_epsilon=1e-5,
                  schedule='linear', verbose=0, tensorboard_log=None, _init_setup_model=True,
@@ -122,110 +125,109 @@ class PPOImitation(pposgd_simple.PPO1):
                          n_cpu_tf_sess=n_cpu_tf_sess)
         return
 
-
     def setup_model(self):
-      with SetVerbosity(self.verbose):
+        with SetVerbosity(self.verbose):
 
-        self.graph = tf.Graph()
-        with self.graph.as_default():
-          self.set_random_seed(self.seed)
-          self.sess = tf_util.make_session(num_cpu=self.n_cpu_tf_sess, graph=self.graph)
+            self.graph = tf.Graph()
+            with self.graph.as_default():
+                self.set_random_seed(self.seed)
+                self.sess = tf_util.make_session(num_cpu=self.n_cpu_tf_sess, graph=self.graph)
 
-          # Construct network for new policy
-          self.policy_pi = self.policy(self.sess, self.observation_space, self.action_space, self.n_envs, 1,
-                                       None, reuse=False, **self.policy_kwargs)
+                # Construct network for new policy
+                self.policy_pi = self.policy(self.sess, self.observation_space, self.action_space, self.n_envs, 1,
+                                             None, reuse=False, **self.policy_kwargs)
 
-          # Network for old policy
-          with tf.variable_scope("oldpi", reuse=False):
-            old_pi = self.policy(self.sess, self.observation_space, self.action_space, self.n_envs, 1,
-                                 None, reuse=False, **self.policy_kwargs)
+                # Network for old policy
+                with tf.variable_scope("oldpi", reuse=False):
+                    old_pi = self.policy(self.sess, self.observation_space, self.action_space, self.n_envs, 1,
+                                         None, reuse=False, **self.policy_kwargs)
 
-          with tf.variable_scope("loss", reuse=False):
-            # Target advantage function (if applicable)
-            atarg = tf.placeholder(dtype=tf.float32, shape=[None])
+                with tf.variable_scope("loss", reuse=False):
+                    # Target advantage function (if applicable)
+                    atarg = tf.placeholder(dtype=tf.float32, shape=[None])
 
-            # Empirical return
-            ret = tf.placeholder(dtype=tf.float32, shape=[None])
+                    # Empirical return
+                    ret = tf.placeholder(dtype=tf.float32, shape=[None])
 
-            # learning rate multiplier, updated with schedule
-            lrmult = tf.placeholder(name='lrmult', dtype=tf.float32, shape=[])
+                    # learning rate multiplier, updated with schedule
+                    lrmult = tf.placeholder(name='lrmult', dtype=tf.float32, shape=[])
 
-            # Annealed cliping parameter epislon
-            clip_param = self.clip_param * lrmult
+                    # Annealed cliping parameter epislon
+                    clip_param = self.clip_param * lrmult
 
-            obs_ph = self.policy_pi.obs_ph
-            action_ph = self.policy_pi.pdtype.sample_placeholder([None])
+                    obs_ph = self.policy_pi.obs_ph
+                    action_ph = self.policy_pi.pdtype.sample_placeholder([None])
 
-            kloldnew = old_pi.proba_distribution.kl(self.policy_pi.proba_distribution)
-            ent = self.policy_pi.proba_distribution.entropy()
-            meankl = tf.reduce_mean(kloldnew)
-            meanent = tf.reduce_mean(ent)
-            pol_entpen = (-self.entcoeff) * meanent
+                    kloldnew = old_pi.proba_distribution.kl(self.policy_pi.proba_distribution)
+                    ent = self.policy_pi.proba_distribution.entropy()
+                    meankl = tf.reduce_mean(kloldnew)
+                    meanent = tf.reduce_mean(ent)
+                    pol_entpen = (-self.entcoeff) * meanent
 
-            # pnew / pold
-            ratio = tf.exp(self.policy_pi.proba_distribution.logp(action_ph) -
-                           old_pi.proba_distribution.logp(action_ph))
+                    # pnew / pold
+                    ratio = tf.exp(self.policy_pi.proba_distribution.logp(action_ph) -
+                                   old_pi.proba_distribution.logp(action_ph))
 
-            # surrogate from conservative policy iteration
-            surr1 = ratio * atarg
-            surr2 = tf.clip_by_value(ratio, 1.0 - clip_param, 1.0 + clip_param) * atarg
+                    # surrogate from conservative policy iteration
+                    surr1 = ratio * atarg
+                    surr2 = tf.clip_by_value(ratio, 1.0 - clip_param, 1.0 + clip_param) * atarg
 
-            clip_frac = tf.reduce_mean(tf.to_float(tf.greater(tf.abs(ratio - 1.0), clip_param)))
+                    clip_frac = tf.reduce_mean(tf.to_float(tf.greater(tf.abs(ratio - 1.0), clip_param)))
 
-            # PPO's pessimistic surrogate (L^CLIP)
-            pol_surr = - tf.reduce_mean(tf.minimum(surr1, surr2))
-            vf_loss = tf.reduce_mean(tf.square(self.policy_pi.value_flat - ret))
-            total_loss = pol_surr + pol_entpen + vf_loss
-            losses = [pol_surr, pol_entpen, vf_loss, meankl, meanent]
-            self.loss_names = ["pol_surr", "pol_entpen", "vf_loss", "kl", "ent"]
+                    # PPO's pessimistic surrogate (L^CLIP)
+                    pol_surr = - tf.reduce_mean(tf.minimum(surr1, surr2))
+                    vf_loss = tf.reduce_mean(tf.square(self.policy_pi.value_flat - ret))
+                    total_loss = pol_surr + pol_entpen + vf_loss
+                    losses = [pol_surr, pol_entpen, vf_loss, meankl, meanent]
+                    self.loss_names = ["pol_surr", "pol_entpen", "vf_loss", "kl", "ent"]
 
-            tf.summary.scalar('entropy_loss', pol_entpen)
-            tf.summary.scalar('policy_gradient_loss', pol_surr)
-            tf.summary.scalar('value_function_loss', vf_loss)
-            tf.summary.scalar('approximate_kullback-leibler', meankl)
-            tf.summary.scalar('clip_factor', clip_param)
-            tf.summary.scalar('loss', total_loss)
-            tf.summary.scalar('clip_frac', clip_frac)
+                    tf.summary.scalar('entropy_loss', pol_entpen)
+                    tf.summary.scalar('policy_gradient_loss', pol_surr)
+                    tf.summary.scalar('value_function_loss', vf_loss)
+                    tf.summary.scalar('approximate_kullback-leibler', meankl)
+                    tf.summary.scalar('clip_factor', clip_param)
+                    tf.summary.scalar('loss', total_loss)
+                    tf.summary.scalar('clip_frac', clip_frac)
 
-            self.params = tf_util.get_trainable_vars("model")
+                    self.params = tf_util.get_trainable_vars("model")
 
-            self.assign_old_eq_new = tf_util.function(
-                [], [], updates=[tf.assign(oldv, newv) for (oldv, newv) in
-                                 zipsame(tf_util.get_globals_vars("oldpi"), tf_util.get_globals_vars("model"))])
+                    self.assign_old_eq_new = tf_util.function(
+                        [], [], updates=[tf.assign(oldv, newv) for (oldv, newv) in
+                                         zipsame(tf_util.get_globals_vars("oldpi"), tf_util.get_globals_vars("model"))])
 
-          with tf.variable_scope("Adam_mpi", reuse=False):
-            self.adam = MpiAdam(self.params, epsilon=self.adam_epsilon, sess=self.sess)
+                with tf.variable_scope("Adam_mpi", reuse=False):
+                    self.adam = MpiAdam(self.params, epsilon=self.adam_epsilon, sess=self.sess)
 
-          with tf.variable_scope("input_info", reuse=False):
-            tf.summary.scalar('discounted_rewards', tf.reduce_mean(ret))
-            tf.summary.scalar('learning_rate', tf.reduce_mean(self.optim_stepsize))
-            tf.summary.scalar('advantage', tf.reduce_mean(atarg))
-            tf.summary.scalar('clip_range', tf.reduce_mean(self.clip_param))
+                with tf.variable_scope("input_info", reuse=False):
+                    tf.summary.scalar('discounted_rewards', tf.reduce_mean(ret))
+                    tf.summary.scalar('learning_rate', tf.reduce_mean(self.optim_stepsize))
+                    tf.summary.scalar('advantage', tf.reduce_mean(atarg))
+                    tf.summary.scalar('clip_range', tf.reduce_mean(self.clip_param))
 
-            if self.full_tensorboard_log:
-              tf.summary.histogram('discounted_rewards', ret)
-              tf.summary.histogram('learning_rate', self.optim_stepsize)
-              tf.summary.histogram('advantage', atarg)
-              tf.summary.histogram('clip_range', self.clip_param)
-              if tf_util.is_image(self.observation_space):
-                tf.summary.image('observation', obs_ph)
-              else:
-                tf.summary.histogram('observation', obs_ph)
+                    if self.full_tensorboard_log:
+                        tf.summary.histogram('discounted_rewards', ret)
+                        tf.summary.histogram('learning_rate', self.optim_stepsize)
+                        tf.summary.histogram('advantage', atarg)
+                        tf.summary.histogram('clip_range', self.clip_param)
+                        if tf_util.is_image(self.observation_space):
+                            tf.summary.image('observation', obs_ph)
+                        else:
+                            tf.summary.histogram('observation', obs_ph)
 
-          self.step = self.policy_pi.step
-          self.proba_step = self.policy_pi.proba_step
-          self.initial_state = self.policy_pi.initial_state
+                self.step = self.policy_pi.step
+                self.proba_step = self.policy_pi.proba_step
+                self.initial_state = self.policy_pi.initial_state
 
-          tf_util.initialize(sess=self.sess)
+                tf_util.initialize(sess=self.sess)
 
-          self.summary = tf.summary.merge_all()
+                self.summary = tf.summary.merge_all()
 
-          self.lossandgrad = tf_util.function([obs_ph, old_pi.obs_ph, action_ph, atarg, ret, lrmult],
-                                              [self.summary, tf_util.flatgrad(total_loss, self.params)] + losses)
-          self.compute_losses = tf_util.function([obs_ph, old_pi.obs_ph, action_ph, atarg, ret, lrmult],
-                                                 losses)
+                self.lossandgrad = tf_util.function([obs_ph, old_pi.obs_ph, action_ph, atarg, ret, lrmult],
+                                                    [self.summary, tf_util.flatgrad(total_loss, self.params)] + losses)
+                self.compute_losses = tf_util.function([obs_ph, old_pi.obs_ph, action_ph, atarg, ret, lrmult],
+                                                       losses)
 
-      return
+        return
 
     def learn(self, total_timesteps, callback=None, log_interval=100, tb_log_name="PPO1",
               reset_num_timesteps=True, save_path=None, save_iters=20):
@@ -302,7 +304,7 @@ class PPOImitation(pposgd_simple.PPO1):
 
                     # set old parameter values to new parameter values
                     self.assign_old_eq_new(sess=self.sess)
-                    
+
                     if is_root:
                         logger.log("Optimizing...")
                         logger.log(fmt_row(13, self.loss_names))
@@ -339,7 +341,7 @@ class PPOImitation(pposgd_simple.PPO1):
 
                             self.adam.update(grad, self.optim_stepsize * cur_lrmult)
                             losses.append(newlosses)
-                        
+
                         if is_root:
                             logger.log(fmt_row(13, np.mean(losses, axis=0)))
 
@@ -378,7 +380,8 @@ class PPOImitation(pposgd_simple.PPO1):
                     self.num_timesteps += current_it_timesteps
 
                     if is_root and (save_path is not None) and (iters_so_far % save_iters == 0):
-                      self.save(save_path)
+                        path = os.path.join(save_path, '{}_{}_steps'.format('rl_policy', self.num_timesteps))
+                        self.save(path)
 
                     iters_so_far += 1
                     logger.record_tabular("EpisodesSoFar", episodes_so_far)
@@ -387,8 +390,4 @@ class PPOImitation(pposgd_simple.PPO1):
                     if self.verbose >= 1 and is_root:
                         logger.dump_tabular()
         callback.on_training_end()
-
-        if is_root:
-            self.save(save_path)
-
         return self

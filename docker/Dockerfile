@@ -6,17 +6,17 @@ ARG USER_GROUP_ID
 
 # Installs basics including add-apt.
 RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y --no-install-recommends \
-        software-properties-common \
-        curl \
-        less
+    software-properties-common \
+    curl \
+    wget
 
 # Install Python 3.7.11 and Pip
-RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+RUN ${APT_COMMAND} update && \
+    ${APT_COMMAND} install software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
-    apt-get update && \
-    apt-get install -y python3.7 python3.7-distutils python3.7-dev python3.7-venv && \
-    apt-get clean && \
+    ${APT_COMMAND} update && \
+    ${APT_COMMAND} install python3.7 python3.7-distutils python3.7-dev python3.7-venv && \
+    ${APT_COMMAND} clean && \
     rm -rf /var/lib/apt/lists/* && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
 
@@ -25,11 +25,12 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py
 RUN python3.7 get-pip.py
 
 # Install dependencies
-RUN apt-get update && apt-get install -y wget \
+RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y wget \
     sudo \
     unzip \
     curl \
     vim \
+    less \
     git \
     libopenmpi-dev \
     g++ \
@@ -80,7 +81,14 @@ RUN touch /home/user/.ssh/authorized_keys
 RUN chmod 600 /home/user/.ssh/authorized_keys
 ADD .ssh/id_rsa.pub /home/user/.ssh/authorized_keys
 
+
+RUN echo "Port 2020" >> /etc/ssh/sshd_config
+EXPOSE 2020
+
+
 USER user
+
+ENTRYPOINT sudo service ssh restart && bash
 
 
 
