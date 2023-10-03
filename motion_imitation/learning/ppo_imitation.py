@@ -292,8 +292,13 @@ class PPOImitation(pposgd_simple.PPO1):
                                                     seg["true_rewards"].reshape((self.n_envs, -1)),
                                                     seg["dones"].reshape((self.n_envs, -1)),
                                                     writer, self.num_timesteps)
+                        # Add a summary for the number of episodes completed in this batch
+                        num_eps_summary = tf.Summary(value=[
+                            tf.Summary.Value(tag='episodes/episodes_in_batch',
+                                             simple_value=len(seg["ep_lens"]))])
+                        writer.add_summary(num_eps_summary, self.num_timesteps)
 
-                    # predicted value function before udpate
+                    # predicted value function before update
                     vpredbefore = seg["vpred"]
 
                     # standardized advantage function estimate
@@ -390,4 +395,5 @@ class PPOImitation(pposgd_simple.PPO1):
                     if self.verbose >= 1 and is_root:
                         logger.dump_tabular()
         callback.on_training_end()
+
         return self
