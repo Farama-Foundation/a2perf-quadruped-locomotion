@@ -286,18 +286,6 @@ class PPOImitation(pposgd_simple.PPO1):
                     observations, actions = seg["observations"], seg["actions"]
                     atarg, tdlamret = seg["adv"], seg["tdlamret"]
 
-                    # true_rew is the reward without discount
-                    if writer is not None:
-                        total_episode_reward_logger(self.episode_reward,
-                                                    seg["true_rewards"].reshape((self.n_envs, -1)),
-                                                    seg["dones"].reshape((self.n_envs, -1)),
-                                                    writer, self.num_timesteps)
-                        # Add a summary for the number of episodes completed in this batch
-                        num_eps_summary = tf.Summary(value=[
-                            tf.Summary.Value(tag='episodes/episodes_in_batch',
-                                             simple_value=len(seg["ep_lens"]))])
-                        writer.add_summary(num_eps_summary, self.num_timesteps)
-
                     # predicted value function before update
                     vpredbefore = seg["vpred"]
 
@@ -381,6 +369,26 @@ class PPOImitation(pposgd_simple.PPO1):
                     logger.record_tabular("EpThisIter", len(lens))
                     episodes_so_far += len(lens)
                     current_it_timesteps = MPI.COMM_WORLD.allreduce(seg["total_timestep"])
+
+                    if len(rews) > 0 and writer is not None:
+                        # Logging episode_reward at iters_so_far
+                        reward_summary = tf.Summary(
+                            value=[
+                                tf.Summary.Value(tag="episode_reward", simple_value=np.mean(rews))])
+                        writer.add_summary(reward_summary, iters_so_far)
+
+                        # Logging iters_so_far (iterations) at iters_so_far
+                        epoch_summary = tf.Summary(
+                            value=[
+                                tf.Summary.Value(tag="iterations", simple_value=iters_so_far)])
+                        writer.add_summary(epoch_summary, iters_so_far)
+
+                        # Logging self.num_timesteps at iters_so_far
+                        timesteps_summary = tf.Summary(
+                            value=[
+                                tf.Summary.Value(tag="num_timesteps",  simple_value=self.num_timesteps)])
+                        writer.add_summary(timesteps_summary, iters_so_far)
+                        writer.flush()
                     timesteps_so_far += current_it_timesteps
                     self.num_timesteps += current_it_timesteps
 
