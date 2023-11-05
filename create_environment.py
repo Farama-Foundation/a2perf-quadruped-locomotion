@@ -1,5 +1,5 @@
 import gin
-import gym
+import gymnasium as gym
 from absl import app
 
 def main(_):

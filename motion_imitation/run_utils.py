@@ -12,7 +12,7 @@ import os
 import random
 import tensorflow as tf
 import time
-import gym
+import gymnasium as gym
 import gin
 
 from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder

@@ -1114,7 +1114,7 @@ class ImitationTask(object):
   def _randint(self, val_min, val_max, size=None):
     """Samples random integer between [val_min, val_max]."""
     if hasattr(self._env, "np_random"):
-      rand_val = self._env.np_random.randint(val_min, val_max, size=size)
+      rand_val = self._env.np_random.integers(val_min, val_max, size=size)
     else:
       rand_val = np.random.randint(val_min, val_max, size=size)
     return rand_val

@@ -15,9 +15,9 @@
 """This file implements the locomotion gym env."""
 import collections
 import time
-import gym
-from gym import spaces
-from gym.utils import seeding
+import gymnasium as gym
+from gymnasium import spaces
+from gymnasium.utils import seeding
 import numpy as np
 import pybullet  # pytype: disable=import-error
 import pybullet_utils.bullet_client as bullet_client

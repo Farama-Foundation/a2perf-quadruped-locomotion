@@ -94,14 +94,14 @@ pip3 install motion_imitation --user
 
 Then, you can directly invoke the default gym environment in Python:
 ```python
-import gym
+import gymnasium as gym
 env = gym.make('motion_imitation:A1GymEnv-v1')
 ```
 
 Note that the pybullet rendering is slightly different from Mujoco. To enable GUI rendering and visualize the training process, you can call:
 
 ```python
-import gym
+import gymnasium as gym
 env = gym.make('motion_imitation:A1GymEnv-v1', render=True)
 ```
 

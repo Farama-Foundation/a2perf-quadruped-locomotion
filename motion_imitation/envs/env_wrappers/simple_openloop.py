@@ -26,7 +26,7 @@ parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
 
 import attr
-from gym import spaces
+from gymnasium import spaces
 import numpy as np
 
 from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_pose_utils

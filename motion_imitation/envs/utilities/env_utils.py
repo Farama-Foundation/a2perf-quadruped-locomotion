@@ -20,7 +20,7 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-from gym import spaces
+from gymnasium import spaces
 import numpy as np
 
 def flatten_observations(observation_dict, observation_excluded=()):

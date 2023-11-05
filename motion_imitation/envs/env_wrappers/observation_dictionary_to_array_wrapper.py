@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """An env wrapper that flattens the observation dictionary to an array."""
-import gym
+import gymnasium as gym
 from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import env_utils
 
 
