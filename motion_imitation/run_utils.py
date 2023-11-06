@@ -29,7 +29,7 @@ ENABLE_ENV_RANDOMIZER = True
 """Wrapper to make the environment suitable for OpenAI gym."""
 
 
-@gin.configurable('QuadrupedLocomotionEnv')
+@gin.configurable('QuadrupedLocomotion')
 class RunUtils(gym.Env):
     def __init__(self,
                  seed=None,
@@ -88,7 +88,7 @@ class RunUtils(gym.Env):
 
         seed += 97 * MPI.COMM_WORLD.Get_rank()
 
-        tf.set_random_seed(seed)
+        tf.compat.v1.set_random_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
 

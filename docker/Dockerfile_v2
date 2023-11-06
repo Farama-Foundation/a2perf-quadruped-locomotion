@@ -14,14 +14,14 @@ RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt-get install -y python3.7 python3.7-distutils python3.7-dev && \
+    apt-get install -y python3.9 python3.9-distutils python3.9-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py
 
-RUN python3.7 get-pip.py
+RUN python3.9 get-pip.py
 
 # Install dependencies
 RUN apt-get update && apt-get install -y wget \

@@ -44,7 +44,7 @@ def set_rand_seed(seed=None):
 
   seed += 97 * MPI.COMM_WORLD.Get_rank()
 
-  tf.set_random_seed(seed)
+  tf.compat.v1.set_random_seed(seed)
   np.random.seed(seed)
   random.seed(seed)
 

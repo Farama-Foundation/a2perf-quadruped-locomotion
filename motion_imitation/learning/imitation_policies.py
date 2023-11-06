@@ -45,7 +45,7 @@ class DiagGaussianFixedVarProbabilityDistributionType(DiagGaussianProbabilityDis
                                         pi_init_scale=1.0, pi_init_bias=0.0, pi_init_std=1.0,
                                         vf_init_scale=1.0, vf_init_bias=0.0):
         mean = linear(pi_latent_vector, 'pi', self.size, init_scale=pi_init_scale, init_bias=pi_init_bias)
-        logstd = tf.get_variable(name='pi/logstd', shape=[1, self.size], initializer=tf.constant_initializer(np.log(pi_init_std)), trainable=False)
+        logstd = tf.compat.v1.get_variable(name='pi/logstd', shape=[1, self.size], initializer=tf.compat.v1.constant_initializer(np.log(pi_init_std)), trainable=False)
         pdparam = tf.concat([mean, mean * 0.0 + logstd], axis=1)
         q_values = linear(vf_latent_vector, 'q', self.size, init_scale=vf_init_scale, init_bias=vf_init_bias)
         return self.proba_distribution_from_flat(pdparam), mean, q_values
@@ -93,11 +93,11 @@ class ImitationPolicy(FeedForwardPolicy):
                 layers = [64, 64]
             net_arch = [dict(vf=layers, pi=layers)]
 
-        with tf.variable_scope("model", reuse=reuse):
+        with tf.compat.v1.variable_scope("model", reuse=reuse):
             if feature_extraction == "cnn":
                 pi_latent = vf_latent = cnn_extractor(self.processed_obs, **kwargs)
             else:
-                pi_latent, vf_latent = mlp_extractor(tf.layers.flatten(self.processed_obs), net_arch, act_fun)
+                pi_latent, vf_latent = mlp_extractor(tf.compat.v1.layers.flatten(self.processed_obs), net_arch, act_fun)
 
             self._value_fn = linear(vf_latent, 'vf', 1)
 

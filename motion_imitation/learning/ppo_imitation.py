@@ -138,19 +138,19 @@ class PPOImitation(pposgd_simple.PPO1):
                                              None, reuse=False, **self.policy_kwargs)
 
                 # Network for old policy
-                with tf.variable_scope("oldpi", reuse=False):
+                with tf.compat.v1.variable_scope("oldpi", reuse=False):
                     old_pi = self.policy(self.sess, self.observation_space, self.action_space, self.n_envs, 1,
                                          None, reuse=False, **self.policy_kwargs)
 
-                with tf.variable_scope("loss", reuse=False):
+                with tf.compat.v1.variable_scope("loss", reuse=False):
                     # Target advantage function (if applicable)
-                    atarg = tf.placeholder(dtype=tf.float32, shape=[None])
+                    atarg = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None])
 
                     # Empirical return
-                    ret = tf.placeholder(dtype=tf.float32, shape=[None])
+                    ret = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None])
 
                     # learning rate multiplier, updated with schedule
-                    lrmult = tf.placeholder(name='lrmult', dtype=tf.float32, shape=[])
+                    lrmult = tf.compat.v1.placeholder(name='lrmult', dtype=tf.float32, shape=[])
 
                     # Annealed cliping parameter epislon
                     clip_param = self.clip_param * lrmult
@@ -172,7 +172,7 @@ class PPOImitation(pposgd_simple.PPO1):
                     surr1 = ratio * atarg
                     surr2 = tf.clip_by_value(ratio, 1.0 - clip_param, 1.0 + clip_param) * atarg
 
-                    clip_frac = tf.reduce_mean(tf.to_float(tf.greater(tf.abs(ratio - 1.0), clip_param)))
+                    clip_frac = tf.reduce_mean(tf.cast(tf.greater(tf.abs(ratio - 1.0), clip_param), dtype=tf.float32))
 
                     # PPO's pessimistic surrogate (L^CLIP)
                     pol_surr = - tf.reduce_mean(tf.minimum(surr1, surr2))
@@ -181,38 +181,38 @@ class PPOImitation(pposgd_simple.PPO1):
                     losses = [pol_surr, pol_entpen, vf_loss, meankl, meanent]
                     self.loss_names = ["pol_surr", "pol_entpen", "vf_loss", "kl", "ent"]
 
-                    tf.summary.scalar('entropy_loss', pol_entpen)
-                    tf.summary.scalar('policy_gradient_loss', pol_surr)
-                    tf.summary.scalar('value_function_loss', vf_loss)
-                    tf.summary.scalar('approximate_kullback-leibler', meankl)
-                    tf.summary.scalar('clip_factor', clip_param)
-                    tf.summary.scalar('loss', total_loss)
-                    tf.summary.scalar('clip_frac', clip_frac)
+                    tf.compat.v1.summary.scalar('entropy_loss', pol_entpen)
+                    tf.compat.v1.summary.scalar('policy_gradient_loss', pol_surr)
+                    tf.compat.v1.summary.scalar('value_function_loss', vf_loss)
+                    tf.compat.v1.summary.scalar('approximate_kullback-leibler', meankl)
+                    tf.compat.v1.summary.scalar('clip_factor', clip_param)
+                    tf.compat.v1.summary.scalar('loss', total_loss)
+                    tf.compat.v1.summary.scalar('clip_frac', clip_frac)
 
                     self.params = tf_util.get_trainable_vars("model")
 
                     self.assign_old_eq_new = tf_util.function(
-                        [], [], updates=[tf.assign(oldv, newv) for (oldv, newv) in
+                        [], [], updates=[tf.compat.v1.assign(oldv, newv) for (oldv, newv) in
                                          zipsame(tf_util.get_globals_vars("oldpi"), tf_util.get_globals_vars("model"))])
 
-                with tf.variable_scope("Adam_mpi", reuse=False):
+                with tf.compat.v1.variable_scope("Adam_mpi", reuse=False):
                     self.adam = MpiAdam(self.params, epsilon=self.adam_epsilon, sess=self.sess)
 
-                with tf.variable_scope("input_info", reuse=False):
-                    tf.summary.scalar('discounted_rewards', tf.reduce_mean(ret))
-                    tf.summary.scalar('learning_rate', tf.reduce_mean(self.optim_stepsize))
-                    tf.summary.scalar('advantage', tf.reduce_mean(atarg))
-                    tf.summary.scalar('clip_range', tf.reduce_mean(self.clip_param))
+                with tf.compat.v1.variable_scope("input_info", reuse=False):
+                    tf.compat.v1.summary.scalar('discounted_rewards', tf.reduce_mean(ret))
+                    tf.compat.v1.summary.scalar('learning_rate', tf.reduce_mean(self.optim_stepsize))
+                    tf.compat.v1.summary.scalar('advantage', tf.reduce_mean(atarg))
+                    tf.compat.v1.summary.scalar('clip_range', tf.reduce_mean(self.clip_param))
 
                     if self.full_tensorboard_log:
-                        tf.summary.histogram('discounted_rewards', ret)
-                        tf.summary.histogram('learning_rate', self.optim_stepsize)
-                        tf.summary.histogram('advantage', atarg)
-                        tf.summary.histogram('clip_range', self.clip_param)
+                        tf.compat.v1.summary.histogram('discounted_rewards', ret)
+                        tf.compat.v1.summary.histogram('learning_rate', self.optim_stepsize)
+                        tf.compat.v1.summary.histogram('advantage', atarg)
+                        tf.compat.v1.summary.histogram('clip_range', self.clip_param)
                         if tf_util.is_image(self.observation_space):
-                            tf.summary.image('observation', obs_ph)
+                            tf.compat.v1.summary.image('observation', obs_ph)
                         else:
-                            tf.summary.histogram('observation', obs_ph)
+                            tf.compat.v1.summary.histogram('observation', obs_ph)
 
                 self.step = self.policy_pi.step
                 self.proba_step = self.policy_pi.proba_step
@@ -220,7 +220,7 @@ class PPOImitation(pposgd_simple.PPO1):
 
                 tf_util.initialize(sess=self.sess)
 
-                self.summary = tf.summary.merge_all()
+                self.summary = tf.compat.v1.summary.merge_all()
 
                 self.lossandgrad = tf_util.function([obs_ph, old_pi.obs_ph, action_ph, atarg, ret, lrmult],
                                                     [self.summary, tf_util.flatgrad(total_loss, self.params)] + losses)
@@ -314,8 +314,8 @@ class PPOImitation(pposgd_simple.PPO1):
                                 # run loss backprop with summary, but once every 10 runs save the metadata
                                 # (memory, compute time, ...)
                                 if self.full_tensorboard_log and (1 + k) % 10 == 0:
-                                    run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
-                                    run_metadata = tf.RunMetadata()
+                                    run_options = tf.compat.v1.RunOptions(trace_level=tf.compat.v1.RunOptions.FULL_TRACE)
+                                    run_metadata = tf.compat.v1.RunMetadata()
                                     summary, grad, *newlosses = self.lossandgrad(batch["ob"], batch["ob"], batch["ac"],
                                                                                  batch["atarg"], batch["vtarg"],
                                                                                  cur_lrmult, sess=self.sess,
@@ -372,21 +372,21 @@ class PPOImitation(pposgd_simple.PPO1):
 
                     if len(rews) > 0 and writer is not None:
                         # Logging episode_reward at iters_so_far
-                        reward_summary = tf.Summary(
+                        reward_summary = tf.compat.v1.Summary(
                             value=[
-                                tf.Summary.Value(tag="episode_reward", simple_value=np.mean(rews))])
+                                tf.compat.v1.Summary.Value(tag="episode_reward", simple_value=np.mean(rews))])
                         writer.add_summary(reward_summary, iters_so_far)
 
                         # Logging iters_so_far (iterations) at iters_so_far
-                        epoch_summary = tf.Summary(
+                        epoch_summary = tf.compat.v1.Summary(
                             value=[
-                                tf.Summary.Value(tag="iterations", simple_value=iters_so_far)])
+                                tf.compat.v1.Summary.Value(tag="iterations", simple_value=iters_so_far)])
                         writer.add_summary(epoch_summary, iters_so_far)
 
                         # Logging self.num_timesteps at iters_so_far
-                        timesteps_summary = tf.Summary(
+                        timesteps_summary = tf.compat.v1.Summary(
                             value=[
-                                tf.Summary.Value(tag="num_timesteps",  simple_value=self.num_timesteps)])
+                                tf.compat.v1.Summary.Value(tag="num_timesteps",  simple_value=self.num_timesteps)])
                         writer.add_summary(timesteps_summary, iters_so_far)
                         writer.flush()
                     timesteps_so_far += current_it_timesteps

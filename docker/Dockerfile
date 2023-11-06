@@ -15,14 +15,14 @@ RUN ${APT_COMMAND} update && \
     ${APT_COMMAND} install software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     ${APT_COMMAND} update && \
-    ${APT_COMMAND} install python3.7 python3.7-distutils python3.7-dev python3.7-venv && \
+    ${APT_COMMAND} install python3.9 python3.9-distutils python3.9-dev python3.9-venv && \
     ${APT_COMMAND} clean && \
     rm -rf /var/lib/apt/lists/* && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py
 
-RUN python3.7 get-pip.py
+RUN python3.9 get-pip.py
 
 # Install dependencies
 RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y wget \
@@ -42,22 +42,36 @@ RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y wget \
     libxext6
 
 # Python Packages
-RUN pip install attrs==19.3.0
-RUN pip install gym==0.17.1
-RUN pip install mpi4py==3.0.3
-RUN pip install numpy==1.18.0
-RUN pip install pybullet==3.0.6
-RUN pip install tensorflow==1.15.4
-RUN pip install tensorboard==1.15.0
-RUN pip install typing==3.7.4.1
-RUN pip install stable-baselines==2.10.0
+#RUN pip install attrs==19.3.0
+#RUN pip install gym==0.17.1
+#RUN pip install mpi4py==3.0.3
+#RUN pip install numpy==1.18.0
+#RUN pip install pybullet==3.0.6
+#RUN pip install tensorflow==1.15.4
+#RUN pip install tensorboard==1.15.0
+#RUN pip install typing==3.7.4.1
+#RUN pip install stable-baselines==2.10.0
+#RUN pip install tqdm
+#RUN pip install numba
+#RUN pip install quadprog
+#RUN pip install inputs
+#RUN pip install protobuf==3.20.*
+#RUN pip install gin-config
+RUN pip install attrs
+RUN pip install gymnasium
+RUN pip install mpi4py
+RUN pip install numpy
+RUN pip install pybullet
+RUN pip install tensorflow
+RUN pip install tensorboard
+RUN pip install typing
+#RUN pip install stable-baselines
 RUN pip install tqdm
 RUN pip install numba
 RUN pip install quadprog
 RUN pip install inputs
-RUN pip install protobuf==3.20.*
+RUN pip install protobuf
 RUN pip install gin-config
-
 
 # Enable X11 forwarding for docker
 RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
