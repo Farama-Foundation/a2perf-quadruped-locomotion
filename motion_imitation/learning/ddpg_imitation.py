@@ -8,7 +8,6 @@ import warnings
 import gymnasium as gym
 import numpy as np
 import tensorflow as tf
-import tensorflow.contrib as tc
 from mpi4py import MPI
 
 from stable_baselines import logger
