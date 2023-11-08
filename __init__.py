@@ -9,6 +9,7 @@ gin.parse_config_files_and_bindings([config_file_path], None,
 
 gym.envs.register(
     id='QuadrupedLocomotion-v0',
+    apply_api_compatibility=True,
     entry_point='rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_builder:build_imitation_env',
     kwargs={
         'motion_files': ["/rl-perf/rl_perf/domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt"],
