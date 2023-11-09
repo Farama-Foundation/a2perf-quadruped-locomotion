@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import inspect
+import os
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
@@ -27,16 +27,14 @@ import numpy as np
 import tensorflow as tf
 from mpi4py import MPI
 
-from stable_baselines.common import Dataset, explained_variance, fmt_row, zipsame, ActorCriticRLModel, SetVerbosity, \
+from stable_baselines.common import Dataset, explained_variance, fmt_row, zipsame, SetVerbosity, \
     TensorboardWriter
 from stable_baselines import logger
 import stable_baselines.common.tf_util as tf_util
-from stable_baselines.common.tf_util import total_episode_reward_logger
 from stable_baselines.common.policies import ActorCriticPolicy
 from stable_baselines.common.mpi_adam import MpiAdam
 from stable_baselines.common.mpi_moments import mpi_moments
 from stable_baselines.common.misc_util import flatten_lists
-from stable_baselines.common.runners import traj_segment_generator
 from stable_baselines.trpo_mpi.utils import add_vtarg_and_adv
 from stable_baselines.ppo1 import pposgd_simple
 

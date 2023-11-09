@@ -18,6 +18,7 @@ import numpy as np
 
 from stable_baselines.common.vec_env import VecEnv
 
+
 def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, callback=None):
     """
     Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
@@ -48,11 +49,11 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
     # Initialize state variables
     step = 0
     action = env.action_space.sample()  # not used, just so we have the datatype
-    observation = env.reset()
+    observation, info = env.reset()
 
     cur_ep_ret = 0  # return in current episode
     current_it_len = 0  # len of current iteration
-    current_ep_len = 0 # len of current episode
+    current_ep_len = 0  # len of current episode
     cur_ep_true_ret = 0
     ep_true_rets = []
     ep_rets = []  # returns of completed episodes in this segment
@@ -89,19 +90,19 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
 
             callback.on_rollout_end()
             yield {
-                    "observations": observations,
-                    "rewards": rewards,
-                    "dones": dones,
-                    "episode_starts": episode_starts,
-                    "true_rewards": true_rewards,
-                    "vpred": vpreds,
-                    "nextvpreds": nextvpreds,
-                    "actions": actions,
-                    "ep_rets": ep_rets,
-                    "ep_lens": ep_lens,
-                    "ep_true_rets": ep_true_rets,
-                    "total_timestep": current_it_len,
-                    'continue_training': True
+                "observations": observations,
+                "rewards": rewards,
+                "dones": dones,
+                "episode_starts": episode_starts,
+                "true_rewards": true_rewards,
+                "vpred": vpreds,
+                "nextvpreds": nextvpreds,
+                "actions": actions,
+                "ep_rets": ep_rets,
+                "ep_lens": ep_lens,
+                "ep_true_rets": ep_true_rets,
+                "total_timestep": current_it_len,
+                'continue_training': True
             }
             _, vpred, _, info = policy.step(observation.reshape(-1, *observation.shape))
             # Be careful!!! if you change the downstream algorithm to aggregate
@@ -129,9 +130,11 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
 
         if gail:
             reward = reward_giver.get_reward(observation, clipped_action[0])
-            observation, true_reward, done, info = env.step(clipped_action[0])
+            observation, true_reward, terminated, truncated, info = env.step(clipped_action[0])
+            done = truncated or terminated
         else:
-            observation, reward, done, info = env.step(clipped_action[0])
+            observation, reward, terminated, truncated, info = env.step(clipped_action[0])
+            done = truncated or terminated
             true_reward = reward
 
         if callback is not None:
@@ -151,7 +154,7 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
                     "ep_true_rets": ep_true_rets,
                     "total_timestep": current_it_len,
                     'continue_training': False
-                    }
+                }
                 return
 
         rewards[i] = reward
@@ -186,7 +189,7 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
             cur_ep_true_ret = 0
             current_ep_len = 0
             if not isinstance(env, VecEnv):
-                observation = env.reset()
+                observation, info = env.reset()
 
         step += 1
     return
