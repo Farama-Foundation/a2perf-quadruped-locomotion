@@ -1,3 +1,0 @@
-motion_imitation
-mpc_controller
-mpc_osqp
