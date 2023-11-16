@@ -23,9 +23,12 @@ import pybullet  # pytype: disable=import-error
 import pybullet_utils.bullet_client as bullet_client
 import pybullet_data as pd
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import space_utils
+from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import \
+  robot_config
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
+  sensor
+from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
+  space_utils
 
 _ACTION_EPS = 0.01
 _NUM_SIMULATION_ITERATION_STEPS = 300
@@ -40,12 +43,12 @@ class LocomotionGymEnv(gym.Env):
   }
 
   def __init__(self,
-               gym_config,
-               robot_class=None,
-               env_sensors=None,
-               robot_sensors=None,
-               task=None,
-               env_randomizers=None):
+      gym_config,
+      robot_class=None,
+      env_sensors=None,
+      robot_sensors=None,
+      task=None,
+      env_randomizers=None):
     """Initializes the locomotion gym environment.
 
     Args:
@@ -108,9 +111,10 @@ class LocomotionGymEnv(gym.Env):
           pybullet.COV_ENABLE_GUI,
           gym_config.simulation_parameters.enable_rendering_gui)
       if hasattr(self._task, '_draw_ref_model_alpha'):
-        self._show_reference_id = pybullet.addUserDebugParameter("show reference",0,1,
-          self._task._draw_ref_model_alpha)
-      self._delay_id = pybullet.addUserDebugParameter("delay",0,0.3,0)
+        self._show_reference_id = pybullet.addUserDebugParameter(
+            "show reference", 0, 1,
+            self._task._draw_ref_model_alpha)
+      self._delay_id = pybullet.addUserDebugParameter("delay", 0, 0.3, 0)
     else:
       self._pybullet_client = bullet_client.BulletClient(
           connection_mode=pybullet.DIRECT)
@@ -191,9 +195,9 @@ class LocomotionGymEnv(gym.Env):
     return None
 
   def reset(self,
-            initial_motor_angles=None,
-            reset_duration=0.0,
-            reset_visualization_camera=True):
+      initial_motor_angles=None,
+      reset_duration=0.0,
+      reset_visualization_camera=True):
     """Resets the robot's position in the world or rebuild the sim world.
 
     The simulation world will be rebuilt if self._hard_reset is True.
@@ -318,17 +322,21 @@ class LocomotionGymEnv(gym.Env):
       self._pybullet_client.configureDebugVisualizer(
           self._pybullet_client.COV_ENABLE_SINGLE_STEP_RENDERING, 1)
       alpha = 1.
-      if self._show_reference_id>=0:
-        alpha = self._pybullet_client.readUserDebugParameter(self._show_reference_id)
-      
+      if self._show_reference_id >= 0:
+        alpha = self._pybullet_client.readUserDebugParameter(
+            self._show_reference_id)
+
       ref_col = [1, 1, 1, alpha]
       if hasattr(self._task, '_ref_model'):
-        self._pybullet_client.changeVisualShape(self._task._ref_model, -1, rgbaColor=ref_col)
-        for l in range (self._pybullet_client.getNumJoints(self._task._ref_model)):
-        	self._pybullet_client.changeVisualShape(self._task._ref_model, l, rgbaColor=ref_col)
-    
+        self._pybullet_client.changeVisualShape(self._task._ref_model, -1,
+                                                rgbaColor=ref_col)
+        for l in range(
+            self._pybullet_client.getNumJoints(self._task._ref_model)):
+          self._pybullet_client.changeVisualShape(self._task._ref_model, l,
+                                                  rgbaColor=ref_col)
+
       delay = self._pybullet_client.readUserDebugParameter(self._delay_id)
-      if (delay>0):
+      if (delay > 0):
         time.sleep(delay)
 
     for env_randomizer in self._env_randomizers:
