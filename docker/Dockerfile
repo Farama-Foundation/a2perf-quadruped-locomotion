@@ -41,22 +41,7 @@ RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y wget \
     openssh-server \
     libxext6
 
-# Python Packages
-#RUN pip install attrs==19.3.0
-#RUN pip install gym==0.17.1
-#RUN pip install mpi4py==3.0.3
-#RUN pip install numpy==1.18.0
-#RUN pip install pybullet==3.0.6
-#RUN pip install tensorflow==1.15.4
-#RUN pip install tensorboard==1.15.0
-#RUN pip install typing==3.7.4.1
-#RUN pip install stable-baselines==2.10.0
-#RUN pip install tqdm
-#RUN pip install numba
-#RUN pip install quadprog
-#RUN pip install inputs
-#RUN pip install protobuf==3.20.*
-#RUN pip install gin-config
+
 RUN pip install attrs
 RUN pip install gymnasium
 RUN pip install mpi4py
@@ -65,7 +50,6 @@ RUN pip install pybullet
 RUN pip install tensorflow
 RUN pip install tensorboard
 RUN pip install typing
-#RUN pip install stable-baselines
 RUN pip install tqdm
 RUN pip install numba
 RUN pip install quadprog
@@ -88,6 +72,9 @@ RUN useradd -u $USER_ID -g $USER_GROUP_ID -G 998 -ms /bin/bash user
 RUN usermod -aG sudo user
 RUN echo "user:password" | chpasswd
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Add local/bin to path for Python libraries
+ENV PATH="/home/user/.local/bin:${PATH}"
 
 RUN mkdir /home/user/.ssh
 RUN chmod 700 /home/user/.ssh
