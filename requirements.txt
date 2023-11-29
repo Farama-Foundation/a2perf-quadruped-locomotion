@@ -1,14 +1,17 @@
-# attrs==19.3.0
-# gym==0.17.1
-# mpi4py==3.0.3
+attrs
+gymnasium
+mpi4py
 # numpy==1.18.0
-# pybullet==3.0.6
-# tensorflow==1.15.4
+numpy
+pybullet
+# tensorflow==1.15.
+tensorflow
 # tensorboard==1.15.0
-# typing==3.7.4.1
-# stable-baselines==2.10.0
-# tqdm
-# numba
-# quadprog
-# inputs
-#
+tensorboard
+typing
+tqdm
+numba
+quadprog
+inputs
+protobuf
+gin-config
