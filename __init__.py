@@ -6,6 +6,8 @@ import os
 config_file_path = os.path.join(os.path.dirname(__file__), 'motion_imitation',
                                 'configs', 'envdesign.gin')
 
+motion_file_path = os.path.join(os.path.dirname(__file__), 'motion_imitation/data/motions/dog_pace.txt')
+
 gin.parse_config_files_and_bindings([config_file_path], None,
                                     finalize_config=False)
 
@@ -15,7 +17,8 @@ gym.envs.register(
     entry_point='rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_builder:build_imitation_env',
     kwargs={
         'motion_files': [
-            "/rl-perf/rl_perf/domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt"],
+            # "/rl_perf/rl_perf/domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt"],
+            motion_file_path],
         'enable_rendering': False, 'mode': 'train'}
 )
 
@@ -24,6 +27,7 @@ legacy_gym.envs.register(
     entry_point='rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_builder:build_imitation_env',
     kwargs={
         'motion_files': [
-            "/rl-perf/rl_perf/domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt"],
+            # "/rl_perf/rl_perf/domains/quadruped_locomotion/motion_imitation/data/motions/dog_pace.txt"],
+            motion_file_path],
         'enable_rendering': False, 'mode': 'train'}
 )
