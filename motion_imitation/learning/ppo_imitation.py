@@ -38,7 +38,7 @@ from stable_baselines.common.misc_util import flatten_lists
 from stable_baselines.trpo_mpi.utils import add_vtarg_and_adv
 from stable_baselines.ppo1 import pposgd_simple
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.learning.imitation_runners import traj_segment_generator
+from a2perf.domains.quadruped_locomotion.motion_imitation.learning.imitation_runners import traj_segment_generator
 
 
 def add_vtarg_and_adv(seg, gamma, lam):

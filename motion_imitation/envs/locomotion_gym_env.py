@@ -23,11 +23,11 @@ import pybullet  # pytype: disable=import-error
 import pybullet_utils.bullet_client as bullet_client
 import pybullet_data as pd
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import \
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import \
   robot_config
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
   sensor
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
   space_utils
 
 _ACTION_EPS = 0.01

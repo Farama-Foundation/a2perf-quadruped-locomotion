@@ -30,7 +30,7 @@ from gymnasium import spaces
 import numpy as np
 import typing
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor
 
 
 class UnsupportedConversionError(Exception):

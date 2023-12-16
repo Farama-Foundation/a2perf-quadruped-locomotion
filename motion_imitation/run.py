@@ -27,9 +27,9 @@ import random
 import tensorflow as tf
 import time
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
-from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import imitation_policies as imitation_policies
-from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import ppo_imitation as ppo_imitation
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
+from a2perf.domains.quadruped_locomotion.motion_imitation.learning import imitation_policies as imitation_policies
+from a2perf.domains.quadruped_locomotion.motion_imitation.learning import ppo_imitation as ppo_imitation
 
 from stable_baselines.common.callbacks import CheckpointCallback
 

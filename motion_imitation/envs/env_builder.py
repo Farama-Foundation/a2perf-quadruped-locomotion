@@ -22,19 +22,19 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_env
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_config
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_wrapper_env
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import observation_dictionary_to_array_wrapper
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import observation_dictionary_to_array_wrapper as obs_dict_to_array_wrapper
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import trajectory_generator_wrapper_env
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import simple_openloop
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import simple_forward_task
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_task
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import default_task
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_env
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_wrapper_env
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import observation_dictionary_to_array_wrapper
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import observation_dictionary_to_array_wrapper as obs_dict_to_array_wrapper
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import trajectory_generator_wrapper_env
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import simple_openloop
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import simple_forward_task
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_task
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import default_task
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import environment_sensors
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor_wrappers
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import environment_sensors
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor_wrappers
 from motion_imitation.envs.sensors import robot_sensors
 from motion_imitation.envs.utilities import controllable_env_randomizer_from_config
 from motion_imitation.robots import laikago

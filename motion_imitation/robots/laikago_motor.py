@@ -24,7 +24,7 @@ os.sys.path.insert(0, parentdir)
 import collections
 import numpy as np
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 NUM_MOTORS = 12
 

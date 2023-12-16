@@ -29,8 +29,8 @@ import attr
 from gymnasium import spaces
 import numpy as np
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_pose_utils
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_pose_utils
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_pose_utils
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_pose_utils
 
 class MinitaurPoseOffsetGenerator(object):
   """A trajectory generator that return a constant leg pose."""
