@@ -1,8 +1,11 @@
-FROM ubuntu:20.04
+ARG BASE_IMAGE="nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04"
+FROM $BASE_IMAGE
 
 ARG APT_COMMAND="apt-get -o Acquire::Retries=3 -y"
 ARG USER_ID
 ARG USER_GROUP_ID
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Installs basics including add-apt.
 RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y --no-install-recommends \
@@ -28,14 +31,19 @@ RUN python3.9 get-pip.py
 RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y wget \
     sudo \
     unzip \
-    curl \
     vim \
     less \
     git \
+    build-essential \
+    checkinstall \
     libopenmpi-dev \
+    libopenblas-dev \
     g++ \
     ffmpeg \
     libsm6 \
+    dbus-x11 \
+    x11-utils \
+    x11-apps \
     htop \
     ssh \
     openssh-server \
