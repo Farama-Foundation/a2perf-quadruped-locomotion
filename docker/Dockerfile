@@ -23,13 +23,13 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh &
     rm ./Miniconda3-latest-Linux-x86_64.sh
 
 ENV PATH="/opt/conda/bin:${PATH}"
-RUN conda create -n py38 python=3.8 -y
-ENV CONDA_DEFAULT_ENV=py38
-ENV PATH="/opt/conda/envs/py38/bin:/usr/local/cuda/bin:${PATH}"
+RUN conda create -n py39 python=3.9 -y
+ENV CONDA_DEFAULT_ENV=py39
+ENV PATH="/opt/conda/envs/py39/bin:/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 
 RUN conda init bash
-RUN echo "conda activate py38" >> ~/.bashrc
+RUN echo "conda activate py39" >> ~/.bashrc
 
 
 # Enable X11 forwarding for docker
