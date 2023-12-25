@@ -58,7 +58,6 @@ class RunUtils(gym.Env):
             assert False, "Unsupported mode: " + args.mode
 
         self._num_procs = MPI.COMM_WORLD.Get_size()
-        os.environ["CUDA_VISIBLE_DEVICES"] = '-1'
 
         # Set seed
         self.set_rand_seed(self._seed)
