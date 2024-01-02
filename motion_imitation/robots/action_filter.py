@@ -35,13 +35,15 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-from absl import logging
+
 import numpy as np
+from absl import logging
 from scipy.signal import butter
 
 ACTION_FILTER_ORDER = 2
 ACTION_FILTER_LOW_CUT = 0.0
 ACTION_FILTER_HIGH_CUT = 4.0
+
 
 class ActionFilter(object):
   """Implements a generic lowpass or bandpass action filter."""
@@ -114,7 +116,7 @@ class ActionFilter(object):
     ys = np.concatenate(list(self.yhist), axis=-1)
     y = np.multiply(x, self.b[:, 0]) + np.sum(
         np.multiply(xs, self.b[:, 1:]), axis=-1) - np.sum(
-            np.multiply(ys, self.a[:, 1:]), axis=-1)
+        np.multiply(ys, self.a[:, 1:]), axis=-1)
     self.xhist.appendleft(x.reshape((self.num_joints, 1)).copy())
     self.yhist.appendleft(y.reshape((self.num_joints, 1)).copy())
     return y
@@ -125,15 +127,16 @@ class ActionFilter(object):
       self.xhist[i] = x
       self.yhist[i] = x
 
+
 class ActionFilterButter(ActionFilter):
   """Butterworth filter."""
 
   def __init__(self,
-               lowcut=None,
-               highcut=None,
-               sampling_rate=None,
-               order=ACTION_FILTER_ORDER,
-               num_joints=None):
+      lowcut=None,
+      highcut=None,
+      sampling_rate=None,
+      order=ACTION_FILTER_ORDER,
+      num_joints=None):
     """Initializes a butterworth filter.
 
     Either one per joint or same for all joints.

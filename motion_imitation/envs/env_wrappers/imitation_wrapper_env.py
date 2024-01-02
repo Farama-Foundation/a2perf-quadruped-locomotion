@@ -19,8 +19,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import gymnasium as gym
 import numpy as np
+
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import gym_spaces
 
 
 class ImitationWrapperEnv(object):
@@ -95,14 +96,15 @@ class ImitationWrapperEnv(object):
     Returns:
       A numpy array contains the initial observation after reset.
     """
-    original_observation = self._gym_env.reset(initial_motor_angles, reset_duration)
+    original_observation = self._gym_env.reset(initial_motor_angles,
+                                               reset_duration)
     observation = self._modify_observation(original_observation)
 
     if self._enable_curriculum():
       self._update_time_limit()
 
     return observation
-  
+
   def _modify_observation(self, original_observation):
     """Appends target observations from the reference motion to the observations.
 
@@ -114,7 +116,8 @@ class ImitationWrapperEnv(object):
       observations from the reference motion.
     """
     target_observation = self._task.build_target_obs()
-    observation = np.concatenate([original_observation, target_observation], axis=-1)
+    observation = np.concatenate([original_observation, target_observation],
+                                 axis=-1)
     return observation
 
   def _build_observation_space(self):
@@ -133,7 +136,7 @@ class ImitationWrapperEnv(object):
     low = np.concatenate([low0, task_low], axis=-1)
     high = np.concatenate([high0, task_high], axis=-1)
 
-    obs_space = gym.spaces.Box(low, high)
+    obs_space = gym_spaces.Box(low, high)
 
     return obs_space
 
@@ -147,6 +150,6 @@ class ImitationWrapperEnv(object):
     t = np.clip(t, 0.0, 1.0)
     t = np.power(t, 3.0)
     new_steps = int((1.0 - t) * self._episode_length_start +
-                       t * self._episode_length_end)
+                    t * self._episode_length_end)
     self._max_episode_steps = new_steps
     return

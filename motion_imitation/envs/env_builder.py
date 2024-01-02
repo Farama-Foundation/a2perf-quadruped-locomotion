@@ -19,7 +19,7 @@ import gin
 from mpi4py import MPI
 
 currentdir = os.path.dirname(
-  os.path.abspath(inspect.getfile(inspect.currentframe())))
+    os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
 
@@ -69,7 +69,7 @@ def build_laikago_env(motor_control_mode, enable_rendering):
   sim_params.enable_clip_motor_commands = False
 
   gym_config = locomotion_gym_config.LocomotionGymConfig(
-    simulation_parameters=sim_params)
+      simulation_parameters=sim_params)
 
   robot_class = laikago.Laikago
 
@@ -94,14 +94,12 @@ def build_laikago_env(motor_control_mode, enable_rendering):
 
 @gin.configurable
 def build_imitation_env(motion_files, mode, enable_rendering,
-    num_parallel_envs=None,
+    num_parallel_envs,
     enable_randomizer=None,
     robot_class=laikago.Laikago,
     trajectory_generator=simple_openloop.LaikagoPoseOffsetGenerator(
         action_limit=laikago.UPPER_BOUND)):
   assert len(motion_files) > 0
-  if num_parallel_envs is None:
-    num_parallel_envs = MPI.COMM_WORLD.Get_size()
 
   if enable_randomizer is None:
     enable_randomizer = ENABLE_ENV_RANDOMIZER and (mode != "test")
@@ -115,17 +113,17 @@ def build_imitation_env(motion_files, mode, enable_rendering,
   sim_params.motor_control_mode = robot_config.MotorControlMode.POSITION
 
   gym_config = locomotion_gym_config.LocomotionGymConfig(
-    simulation_parameters=sim_params)
+      simulation_parameters=sim_params)
 
   sensors = [
       sensor_wrappers.HistoricSensorWrapper(
-        wrapped_sensor=robot_sensors.MotorAngleSensor(
-          num_motors=laikago.NUM_MOTORS), num_history=3),
+          wrapped_sensor=robot_sensors.MotorAngleSensor(
+              num_motors=laikago.NUM_MOTORS), num_history=3),
       sensor_wrappers.HistoricSensorWrapper(
-        wrapped_sensor=robot_sensors.IMUSensor(), num_history=3),
+          wrapped_sensor=robot_sensors.IMUSensor(), num_history=3),
       sensor_wrappers.HistoricSensorWrapper(
-        wrapped_sensor=environment_sensors.LastActionSensor(
-          num_actions=laikago.NUM_MOTORS), num_history=3)
+          wrapped_sensor=environment_sensors.LastActionSensor(
+              num_actions=laikago.NUM_MOTORS), num_history=3)
   ]
 
   task = imitation_task.ImitationTask(ref_motion_filenames=motion_files,
@@ -137,7 +135,7 @@ def build_imitation_env(motion_files, mode, enable_rendering,
   randomizers = []
   if enable_randomizer:
     randomizer = controllable_env_randomizer_from_config.ControllableEnvRandomizerFromConfig(
-      verbose=False)
+        verbose=False)
     randomizers.append(randomizer)
 
   env = locomotion_gym_env.LocomotionGymEnv(gym_config=gym_config,
@@ -146,7 +144,7 @@ def build_imitation_env(motion_files, mode, enable_rendering,
                                             robot_sensors=sensors, task=task)
 
   env = observation_dictionary_to_array_wrapper.ObservationDictionaryToArrayWrapper(
-    env)
+      env)
   env = trajectory_generator_wrapper_env.TrajectoryGeneratorWrapperEnv(env,
                                                                        trajectory_generator=trajectory_generator)
 

@@ -16,10 +16,10 @@
 import collections
 import time
 import gymnasium as gym
-from gymnasium import spaces
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import gym_spaces
 from gymnasium.utils import seeding
 import numpy as np
-import pybullet  # pytype: disable=import-error
+import pybullet
 import pybullet_utils.bullet_client as bullet_client
 import pybullet_data as pd
 
@@ -153,15 +153,15 @@ class LocomotionGymEnv(gym.Env):
       for action in action_config:
         action_upper_bound.extend([6.28] * 5)
         action_lower_bound.extend([-6.28] * 5)
-      self.action_space = spaces.Box(np.array(action_lower_bound),
-                                     np.array(action_upper_bound),
-                                     dtype=np.float32)
+      self.action_space = gym_spaces.Box(np.array(action_lower_bound),
+                                         np.array(action_upper_bound),
+                                         dtype=np.float32)
     elif motor_mode == robot_config.MotorControlMode.TORQUE:
       # TODO (yuxiangy): figure out the torque limits of robots.
       torque_limits = np.array([100] * len(self._robot_class.ACTION_CONFIG))
-      self.action_space = spaces.Box(-torque_limits,
-                                     torque_limits,
-                                     dtype=np.float32)
+      self.action_space = gym_spaces.Box(-torque_limits,
+                                         torque_limits,
+                                         dtype=np.float32)
     else:
       # Position mode
       action_upper_bound = []
@@ -171,9 +171,9 @@ class LocomotionGymEnv(gym.Env):
         action_upper_bound.append(action.upper_bound)
         action_lower_bound.append(action.lower_bound)
 
-      self.action_space = spaces.Box(np.array(action_lower_bound),
-                                     np.array(action_upper_bound),
-                                     dtype=np.float32)
+      self.action_space = gym_spaces.Box(np.array(action_lower_bound),
+                                         np.array(action_upper_bound),
+                                         dtype=np.float32)
 
   def close(self):
     if hasattr(self, '_robot') and self._robot:
