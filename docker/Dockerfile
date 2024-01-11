@@ -45,14 +45,12 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1 &&
 # SSH and X11 Configuration
 RUN echo "X11UseLocalhost no\nX11DisplayOffset 10\nPasswordAuthentication yes\nPort 2020" >> /etc/ssh/sshd_config && \
     mkdir /run/sshd
-EXPOSE 2020
 
 # User Creation
 RUN groupadd -g $USER_GROUP_ID user_group && \
     groupadd -g 998 docker && \
     useradd -u $USER_ID -g $USER_GROUP_ID -G 998 -ms /bin/bash user && \
     usermod -aG sudo user && \
-    echo "user:password" | chpasswd && \
     echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     mkdir -p /home/user/.ssh && \
     chmod 700 /home/user/.ssh && \

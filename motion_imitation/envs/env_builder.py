@@ -16,7 +16,8 @@
 import os
 import inspect
 import gin
-from mpi4py import MPI
+
+# from mpi4py import MPI
 
 currentdir = os.path.dirname(
     os.path.abspath(inspect.getfile(inspect.currentframe())))
