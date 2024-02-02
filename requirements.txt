@@ -1,3 +1,4 @@
 pybullet
 attrs
 attr
+pybullet_envs_gymnasium
