@@ -25,7 +25,8 @@ gym.envs.register(
     entry_point='a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_builder:build_imitation_env',
     kwargs={
         'motion_files': [motion_file_path],
-        'enable_rendering': False, 'mode': 'train'
+        'enable_rendering': False, 'mode': 'train',
+        'num_parallel_envs': 1
     }
 )
 
@@ -34,6 +35,7 @@ legacy_gym.envs.register(
     entry_point='a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_builder:build_imitation_env',
     kwargs={
         'motion_files': [motion_file_path],
-        'enable_rendering': False, 'mode': 'train'
+        'enable_rendering': False, 'mode': 'train',
+        'num_parallel_envs': 1
     }
 )
