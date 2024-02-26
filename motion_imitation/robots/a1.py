@@ -26,11 +26,11 @@ import re
 import numpy as np
 import pybullet as pyb  # pytype: disable=import-error
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_constants
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_motor
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_constants
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_motor
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_config
 
 NUM_MOTORS = 12
 NUM_LEGS = 4

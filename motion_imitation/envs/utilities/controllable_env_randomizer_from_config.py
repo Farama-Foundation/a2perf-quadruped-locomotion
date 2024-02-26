@@ -31,8 +31,8 @@ import functools
 import numpy as np
 import tensorflow as tf
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import controllable_env_randomizer_base
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import minitaur_env_randomizer_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import controllable_env_randomizer_base
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import minitaur_env_randomizer_config
 
 SIMULATION_TIME_STEP = 0.001
 NUM_LEGS = 4

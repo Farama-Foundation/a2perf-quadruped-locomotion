@@ -20,8 +20,12 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-from gymnasium import spaces
+
 import numpy as np
+from gymnasium import spaces
+
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import gym_spaces
+
 
 def flatten_observations(observation_dict, observation_excluded=()):
   """Flattens the observation dictionary to an array.
@@ -82,7 +86,7 @@ def flatten_observation_spaces(observation_spaces, observation_excluded=()):
       upper_bound.append(np.asarray(value.high).flatten())
   lower_bound = np.concatenate(lower_bound)
   upper_bound = np.concatenate(upper_bound)
-  observation_space = spaces.Box(
+  observation_space = gym_spaces.Box(
       np.array(lower_bound), np.array(upper_bound), dtype=np.float32)
   if not observation_excluded:
     return observation_space

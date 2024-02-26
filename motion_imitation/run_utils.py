@@ -15,9 +15,9 @@ import time
 import gymnasium as gym
 import gin
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
-from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import imitation_policies as imitation_policies
-from rl_perf.domains.quadruped_locomotion.motion_imitation.learning import ppo_imitation as ppo_imitation
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder as env_builder
+from a2perf.domains.quadruped_locomotion.motion_imitation.learning import imitation_policies as imitation_policies
+from a2perf.domains.quadruped_locomotion.motion_imitation.learning import ppo_imitation as ppo_imitation
 
 from stable_baselines.common.callbacks import CheckpointCallback
 
@@ -58,7 +58,6 @@ class RunUtils(gym.Env):
             assert False, "Unsupported mode: " + args.mode
 
         self._num_procs = MPI.COMM_WORLD.Get_size()
-        os.environ["CUDA_VISIBLE_DEVICES"] = '-1'
 
         # Set seed
         self.set_rand_seed(self._seed)

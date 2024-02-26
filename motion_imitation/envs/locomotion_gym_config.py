@@ -16,9 +16,12 @@
 
 This should be identical to locomotion_gym_config.proto.
 """
-import attr
 import typing
-from motion_imitation.robots import robot_config
+
+import attr
+
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import \
+  robot_config
 
 
 @attr.s
