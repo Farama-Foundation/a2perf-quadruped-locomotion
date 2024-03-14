@@ -23,7 +23,7 @@ os.sys.path.insert(0, parentdir)
 
 import numpy as np
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.utilities import pose3d
+from a2perf.domains.quadruped_locomotion.motion_imitation.utilities import pose3d
 from pybullet_utils import transformations
 
 

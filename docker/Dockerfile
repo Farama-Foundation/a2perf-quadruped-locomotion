@@ -1,96 +1,83 @@
-FROM ubuntu:20.04
+# Base Image
+ARG BASE_IMAGE="nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04"
+FROM $BASE_IMAGE
 
-ARG APT_COMMAND="apt-get -o Acquire::Retries=3 -y"
-ARG USER_ID
-ARG USER_GROUP_ID
+# Environment Variables
+ARG APT_COMMAND="apt-get -o Acquire::Retries=3 --no-install-recommends -y"
+ARG USER_ID=1000
+ARG USER_GROUP_ID=1000
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Installs basics including add-apt.
-RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y --no-install-recommends \
-    software-properties-common \
-    curl \
-    wget
-
-# Install Python 3.7.11 and Pip
+# Add the Deadsnakes PPA for Python 3.10 and Package Installation
 RUN ${APT_COMMAND} update && \
     ${APT_COMMAND} install software-properties-common && \
-    add-apt-repository -y ppa:deadsnakes/ppa && \
+    add-apt-repository ppa:deadsnakes/ppa && \
     ${APT_COMMAND} update && \
-    ${APT_COMMAND} install python3.9 python3.9-distutils python3.9-dev python3.9-venv && \
-    ${APT_COMMAND} clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
-
-RUN curl -O https://bootstrap.pypa.io/get-pip.py
-
-RUN python3.9 get-pip.py
-
-# Install dependencies
-RUN ${APT_COMMAND} update && ${APT_COMMAND} install -y wget \
+    ${APT_COMMAND} upgrade && \
+    ${APT_COMMAND} install --allow-change-held-packages \
+    python3.9 \
+    python3.9-dev \
+    python3.9-venv \
+    python3.9-distutils \
+    wget \
     sudo \
-    unzip \
-    curl \
-    vim \
-    less \
-    git \
-    libopenmpi-dev \
-    g++ \
-    ffmpeg \
-    libsm6 \
-    htop \
+    build-essential \
     ssh \
     openssh-server \
-    libxext6
+    libnss3 \
+    unzip \
+    x11-apps \
+    libopenmpi-dev \
+    x11-utils \
+    libcudnn8 \
+    libcudnn8-dev && \
+    rm -rf /var/lib/apt/lists/*
 
+# Install pip for Python 3.10
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python3.9 get-pip.py && \
+    rm get-pip.py
 
-RUN pip install attrs
-RUN pip install gymnasium
-RUN pip install mpi4py
-RUN pip install numpy
-RUN pip install pybullet
-RUN pip install tensorflow
-RUN pip install tensorboard
-RUN pip install typing
-RUN pip install tqdm
-RUN pip install numba
-RUN pip install quadprog
-RUN pip install inputs
-RUN pip install protobuf
-RUN pip install gin-config
+# Update Python Alternatives to use Python 3.9 as the default
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1 && \
+    update-alternatives --set python /usr/bin/python3.9
 
-# Enable X11 forwarding for docker
-RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config && \
-    echo "X11DisplayOffset 10" >> /etc/ssh/sshd_config && \
-    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
+# SSH and X11 Configuration
+RUN echo "X11UseLocalhost no\nX11DisplayOffset 10\nPasswordAuthentication yes\nPort 2020" >> /etc/ssh/sshd_config && \
+    mkdir /run/sshd
 
-# Add User for safely using mpi4py
-RUN groupadd -g $USER_GROUP_ID user_group
-RUN groupadd -g 998 docker
+# User Creation
+RUN groupadd -g $USER_GROUP_ID user_group && \
+    groupadd -g 998 docker && \
+    useradd -u $USER_ID -g $USER_GROUP_ID -G 998 -ms /bin/bash user && \
+    usermod -aG sudo user && \
+    echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    mkdir -p /home/user/.ssh && \
+    chmod 700 /home/user/.ssh && \
+    touch /home/user/.ssh/authorized_keys && \
+    chmod 600 /home/user/.ssh/authorized_keys
 
-RUN useradd -u $USER_ID -g $USER_GROUP_ID -G 998 -ms /bin/bash user
-
-# Granting sudo privileges
-RUN usermod -aG sudo user
-RUN echo "user:password" | chpasswd
-RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Add local/bin to path for Python libraries
-ENV PATH="/home/user/.local/bin:${PATH}"
-
-RUN mkdir /home/user/.ssh
-RUN chmod 700 /home/user/.ssh
-RUN touch /home/user/.ssh/authorized_keys
-RUN chmod 600 /home/user/.ssh/authorized_keys
-ADD .ssh/id_rsa.pub /home/user/.ssh/authorized_keys
-
-
-RUN echo "Port 2020" >> /etc/ssh/sshd_config
-EXPOSE 2020
-
-
+# Switch to User
 USER user
 
-ENTRYPOINT sudo service ssh restart && bash
+# Set Work Directory
+WORKDIR /home/user
 
+# Create and Activate a Virtual Environment
+RUN python3.9 -m venv venv && \
+    . venv/bin/activate && \
+    pip install --upgrade pip \
+     setuptools \
+    mpi4py  \
+    pybullet
 
+COPY .ssh/id_rsa.pub /home/user/.ssh/authorized_keys
+RUN sudo chown -R user:user_group /home/user
 
+# Set PATH to include the virtual environment's bin directory
+ENV PATH="/home/user/venv/bin:${PATH}"
+ENV PATH="/usr/local/cuda/bin:${PATH}"
+ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 
+# Entry Point
+ENTRYPOINT sudo service ssh start && sudo service dbus start && bash

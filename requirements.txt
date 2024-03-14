@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 attrs
 gymnasium
 mpi4py
@@ -15,3 +16,9 @@ quadprog
 inputs
 protobuf
 gin-config
+=======
+pybullet
+attrs
+attr
+pybullet_envs_gymnasium
+>>>>>>> harvard/main

@@ -21,7 +21,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import env_randomizer_base
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.utilities import env_randomizer_base
 
 
 class ControllableEnvRandomizerBase(env_randomizer_base.EnvRandomizerBase):

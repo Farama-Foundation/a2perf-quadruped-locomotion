@@ -30,11 +30,11 @@ import copy
 import math
 import re
 import numpy as np
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_constants
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_motor
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import action_filter
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import kinematics
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_constants
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_motor
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import action_filter
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import kinematics
 
 INIT_POSITION = [0, 0, .2]
 INIT_RACK_POSITION = [0, 0, 1]

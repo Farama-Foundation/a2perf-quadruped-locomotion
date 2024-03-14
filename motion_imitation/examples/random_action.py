@@ -10,10 +10,10 @@ from absl import app
 from absl import flags
 from tqdm import tqdm
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import env_builder
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import a1
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import laikago
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 
 FLAGS = flags.FLAGS
 flags.DEFINE_enum('robot_type', 'A1', ['A1', 'Laikago'], 'Robot Type.')

@@ -26,9 +26,9 @@ import math
 import attr
 import numpy as np
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_pose_utils
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_pose_utils
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import laikago
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import laikago_pose_utils
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import minitaur_pose_utils
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import laikago
 
 _ABDUCTION_ACTION_INDEXES = [0, 3, 6, 9]
 

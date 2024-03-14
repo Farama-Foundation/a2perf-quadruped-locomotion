@@ -16,37 +16,50 @@
 import os
 import inspect
 import gin
-from mpi4py import MPI
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+# from mpi4py import MPI
+
+currentdir = os.path.dirname(
+    os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_env
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs import locomotion_gym_config
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_wrapper_env
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import observation_dictionary_to_array_wrapper
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import observation_dictionary_to_array_wrapper as obs_dict_to_array_wrapper
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import trajectory_generator_wrapper_env
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import simple_openloop
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import simple_forward_task
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import imitation_task
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import default_task
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import \
+  locomotion_gym_env
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs import \
+  locomotion_gym_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  imitation_wrapper_env
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  observation_dictionary_to_array_wrapper
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  observation_dictionary_to_array_wrapper as obs_dict_to_array_wrapper
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  trajectory_generator_wrapper_env
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  simple_openloop
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  simple_forward_task
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  imitation_task
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.env_wrappers import \
+  default_task
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import environment_sensors
-from rl_perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import sensor_wrappers
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
+  environment_sensors
+from a2perf.domains.quadruped_locomotion.motion_imitation.envs.sensors import \
+  sensor_wrappers
 from motion_imitation.envs.sensors import robot_sensors
-from motion_imitation.envs.utilities import controllable_env_randomizer_from_config
+from motion_imitation.envs.utilities import \
+  controllable_env_randomizer_from_config
 from motion_imitation.robots import laikago
 from motion_imitation.robots import a1
 from motion_imitation.robots import robot_config
 
+ENABLE_ENV_RANDOMIZER = True
 
 
-ENABLE_ENV_RANDOMIZER = True 
-
-def build_laikago_env( motor_control_mode, enable_rendering):
-
+def build_laikago_env(motor_control_mode, enable_rendering):
   sim_params = locomotion_gym_config.SimulationParameters()
   sim_params.enable_rendering = enable_rendering
   sim_params.motor_control_mode = motor_control_mode
@@ -55,8 +68,9 @@ def build_laikago_env( motor_control_mode, enable_rendering):
   sim_params.enable_action_interpolation = False
   sim_params.enable_action_filter = False
   sim_params.enable_clip_motor_commands = False
-  
-  gym_config = locomotion_gym_config.LocomotionGymConfig(simulation_parameters=sim_params)
+
+  gym_config = locomotion_gym_config.LocomotionGymConfig(
+      simulation_parameters=sim_params)
 
   robot_class = laikago.Laikago
 
@@ -68,44 +82,49 @@ def build_laikago_env( motor_control_mode, enable_rendering):
 
   task = default_task.DefaultTask()
 
-  env = locomotion_gym_env.LocomotionGymEnv(gym_config=gym_config, robot_class=robot_class,
+  env = locomotion_gym_env.LocomotionGymEnv(gym_config=gym_config,
+                                            robot_class=robot_class,
                                             robot_sensors=sensors, task=task)
 
-  #env = observation_dictionary_to_array_wrapper.ObservationDictionaryToArrayWrapper(env)
-  #env = trajectory_generator_wrapper_env.TrajectoryGeneratorWrapperEnv(env,
+  # env = observation_dictionary_to_array_wrapper.ObservationDictionaryToArrayWrapper(env)
+  # env = trajectory_generator_wrapper_env.TrajectoryGeneratorWrapperEnv(env,
   #                                                                     trajectory_generator=simple_openloop.LaikagoPoseOffsetGenerator(action_limit=laikago.UPPER_BOUND))
 
   return env
 
+
 @gin.configurable
 def build_imitation_env(motion_files, mode, enable_rendering,
-                        num_parallel_envs = None,
-                        enable_randomizer = None,
-                        robot_class=laikago.Laikago,
-                        trajectory_generator=simple_openloop.LaikagoPoseOffsetGenerator(action_limit=laikago.UPPER_BOUND)):
+    num_parallel_envs,
+    enable_randomizer=None,
+    robot_class=laikago.Laikago,
+    trajectory_generator=simple_openloop.LaikagoPoseOffsetGenerator(
+        action_limit=laikago.UPPER_BOUND)):
   assert len(motion_files) > 0
-  
-  if num_parallel_envs is None:
-    num_parallel_envs = MPI.COMM_WORLD.Get_size()
-    os.environ["CUDA_VISIBLE_DEVICES"] = '-1'
-  
+
   if enable_randomizer is None:
     enable_randomizer = ENABLE_ENV_RANDOMIZER and (mode != "test")
-        
+
   curriculum_episode_length_start = 20
   curriculum_episode_length_end = 600
-  
+
   sim_params = locomotion_gym_config.SimulationParameters()
   sim_params.enable_rendering = enable_rendering
   sim_params.allow_knee_contact = True
   sim_params.motor_control_mode = robot_config.MotorControlMode.POSITION
 
-  gym_config = locomotion_gym_config.LocomotionGymConfig(simulation_parameters=sim_params)
+  gym_config = locomotion_gym_config.LocomotionGymConfig(
+      simulation_parameters=sim_params)
 
   sensors = [
-      sensor_wrappers.HistoricSensorWrapper(wrapped_sensor=robot_sensors.MotorAngleSensor(num_motors=laikago.NUM_MOTORS), num_history=3),
-      sensor_wrappers.HistoricSensorWrapper(wrapped_sensor=robot_sensors.IMUSensor(), num_history=3),
-      sensor_wrappers.HistoricSensorWrapper(wrapped_sensor=environment_sensors.LastActionSensor(num_actions=laikago.NUM_MOTORS), num_history=3)
+      sensor_wrappers.HistoricSensorWrapper(
+          wrapped_sensor=robot_sensors.MotorAngleSensor(
+              num_motors=laikago.NUM_MOTORS), num_history=3),
+      sensor_wrappers.HistoricSensorWrapper(
+          wrapped_sensor=robot_sensors.IMUSensor(), num_history=3),
+      sensor_wrappers.HistoricSensorWrapper(
+          wrapped_sensor=environment_sensors.LastActionSensor(
+              num_actions=laikago.NUM_MOTORS), num_history=3)
   ]
 
   task = imitation_task.ImitationTask(ref_motion_filenames=motion_files,
@@ -116,18 +135,22 @@ def build_imitation_env(motion_files, mode, enable_rendering,
 
   randomizers = []
   if enable_randomizer:
-    randomizer = controllable_env_randomizer_from_config.ControllableEnvRandomizerFromConfig(verbose=False)
+    randomizer = controllable_env_randomizer_from_config.ControllableEnvRandomizerFromConfig(
+        verbose=False)
     randomizers.append(randomizer)
 
-  env = locomotion_gym_env.LocomotionGymEnv(gym_config=gym_config, robot_class=robot_class,
-                                            env_randomizers=randomizers, robot_sensors=sensors, task=task)
+  env = locomotion_gym_env.LocomotionGymEnv(gym_config=gym_config,
+                                            robot_class=robot_class,
+                                            env_randomizers=randomizers,
+                                            robot_sensors=sensors, task=task)
 
-  env = observation_dictionary_to_array_wrapper.ObservationDictionaryToArrayWrapper(env)
+  env = observation_dictionary_to_array_wrapper.ObservationDictionaryToArrayWrapper(
+      env)
   env = trajectory_generator_wrapper_env.TrajectoryGeneratorWrapperEnv(env,
                                                                        trajectory_generator=trajectory_generator)
 
   if mode == "test":
-      curriculum_episode_length_start = curriculum_episode_length_end
+    curriculum_episode_length_start = curriculum_episode_length_end
 
   env = imitation_wrapper_env.ImitationWrapperEnv(env,
                                                   episode_length_start=curriculum_episode_length_start,
@@ -137,14 +160,12 @@ def build_imitation_env(motion_files, mode, enable_rendering,
   return env
 
 
-
 def build_regular_env(robot_class,
-                      motor_control_mode,
-                      enable_rendering=False,
-                      on_rack=False,
-                      action_limit=(0.75, 0.75, 0.75),
-                      wrap_trajectory_generator=True):
-
+    motor_control_mode,
+    enable_rendering=False,
+    on_rack=False,
+    action_limit=(0.75, 0.75, 0.75),
+    wrap_trajectory_generator=True):
   sim_params = locomotion_gym_config.SimulationParameters()
   sim_params.enable_rendering = enable_rendering
   sim_params.motor_control_mode = motor_control_mode

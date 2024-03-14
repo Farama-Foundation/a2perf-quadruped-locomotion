@@ -15,8 +15,8 @@ import pybullet  # pytype:disable=import-error
 import pybullet_data
 from pybullet_utils import bullet_client
 
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import a1_robot
-from rl_perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import a1_robot
+from a2perf.domains.quadruped_locomotion.motion_imitation.robots import robot_config
 FREQ = 0.5
 
 
