@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Environment Modules &#8212; A2Perf 0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=44496db0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Robot Modules" href="robots.html" />
+    <link rel="prev" title="Welcome to A2Perf’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="environment-modules">
+<h1>Environment Modules<a class="headerlink" href="#environment-modules" title="Permalink to this heading">¶</a></h1>
+<section id="module-motion_imitation.envs.locomotion_gym_env">
+<span id="env-builder"></span><h2>Env Builder<a class="headerlink" href="#module-motion_imitation.envs.locomotion_gym_env" title="Permalink to this heading">¶</a></h2>
+<p>This file implements the locomotion gym env.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">motion_imitation.envs.locomotion_gym_env.</span></span><span class="sig-name descname"><span class="pre">LocomotionGymEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gym_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robot_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_sensors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robot_sensors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_randomizers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Env</span></code></p>
+<p>The gym environment for the locomotion tasks.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">spaces.Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ActType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.action_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.all_sensors">
+<span class="sig-name descname"><span class="pre">all_sensors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.all_sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all robot and environmental sensors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>After the user has finished using the environment, close contains the code necessary to “clean up” the environment.</p>
+<p>This is critical for closing rendering windows, database or HTTP connections.
+Calling <code class="docutils literal notranslate"><span class="pre">close</span></code> on an already closed environment has no effect and won’t raise an error.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.env_step_counter">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env_step_counter</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.env_step_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of steps that have been executed in the current environment since the last reset.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>int: The current step count since the last reset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.env_time_step">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env_time_step</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.env_time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the  environment time step.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>float: The current environment time step in seconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.get_ground">
+<span class="sig-name descname"><span class="pre">get_ground</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.get_ground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get simulation ground model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.get_time_since_reset">
+<span class="sig-name descname"><span class="pre">get_time_since_reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.get_time_since_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the time passed (in seconds) since the last reset.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Time in seconds since the last reset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.hard_reset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hard_reset</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.hard_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current state of the hard reset configuration for the environment.</p>
+<p>When <cite>hard_reset</cite> is True, the simulation environment is completely rebuilt
+at each reset, including reloading the physics engine and the robot model.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>bool: The state indicating whether hard resets are enabled.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.last_action">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">last_action</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.last_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last action taken by the robot in the environment.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>numpy.array: The last action applied to the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.last_base_position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">last_base_position</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.last_base_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the last recorded base position of the robot.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple: The coordinates of the robot’s base in the last step.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'render.modes':</span> <span class="pre">['human',</span> <span class="pre">'rgb_array'],</span> <span class="pre">'video.frames_per_second':</span> <span class="pre">100}</span></em><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">spaces.Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ObsType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.observation_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.pybullet_client">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pybullet_client</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.pybullet_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the Bullet physics client used for the simulation.</p>
+<p>This client handles all physics simulations and rendering for the environment.
+It provides direct access to the PyBullet API, allowing for advanced manipulation
+and configuration of the simulation parameters.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>BulletClient: The active PyBullet client instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rgb_array'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the render frames as specified by <code class="xref py py-attr docutils literal notranslate"><span class="pre">render_mode</span></code> during the initialization of the environment.</p>
+<p>The environment’s <a class="reference internal" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.metadata" title="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">metadata</span></code></a> render modes (<cite>env.metadata[“render_modes”]</cite>) should contain the possible
+ways to implement the render modes. In addition, list versions for most render modes is achieved through
+<cite>gymnasium.make</cite> which automatically applies a wrapper to collect rendered frames.</p>
+<dl class="simple">
+<dt>Note:</dt><dd><p>As the <code class="xref py py-attr docutils literal notranslate"><span class="pre">render_mode</span></code> is known during <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, the objects used to render the environment state
+should be initialised in <code class="docutils literal notranslate"><span class="pre">__init__</span></code>.</p>
+</dd>
+</dl>
+<p>By convention, if the <code class="xref py py-attr docutils literal notranslate"><span class="pre">render_mode</span></code> is:</p>
+<ul class="simple">
+<li><p>None (default): no render is computed.</p></li>
+<li><p>“human”: The environment is continuously rendered in the current display or terminal, usually for human consumption.
+This rendering should occur during <a class="reference internal" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.step" title="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code></a> and <a class="reference internal" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.render" title="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.render"><code class="xref py py-meth docutils literal notranslate"><span class="pre">render()</span></code></a> doesn’t need to be called. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p>“rgb_array”: Return a single frame representing the current state of the environment.
+A frame is a <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> with shape <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">3)</span></code> representing RGB values for an x-by-y pixel image.</p></li>
+<li><p>“ansi”: Return a strings (<code class="docutils literal notranslate"><span class="pre">str</span></code>) or <code class="docutils literal notranslate"><span class="pre">StringIO.StringIO</span></code> containing a terminal-style text representation
+for each time step. The text can include newlines and ANSI escape sequences (e.g. for colors).</p></li>
+<li><p>“rgb_array_list” and “ansi_list”: List based version of render modes are possible (except Human) through the
+wrapper, <code class="xref py py-class docutils literal notranslate"><span class="pre">gymnasium.wrappers.RenderCollection</span></code> that is automatically applied during <code class="docutils literal notranslate"><span class="pre">gymnasium.make(...,</span> <span class="pre">render_mode=&quot;rgb_array_list&quot;)</span></code>.
+The frames collected are popped after <a class="reference internal" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.render" title="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.render"><code class="xref py py-meth docutils literal notranslate"><span class="pre">render()</span></code></a> is called or <a class="reference internal" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.reset" title="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a>.</p></li>
+</ul>
+<dl class="simple">
+<dt>Note:</dt><dd><p>Make sure that your class’s <a class="reference internal" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.metadata" title="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">metadata</span></code></a> <code class="docutils literal notranslate"><span class="pre">&quot;render_modes&quot;</span></code> key includes the list of supported modes.</p>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.25.0: </span>The render function was changed to no longer accept parameters, rather these parameters should be specified
+in the environment initialised, i.e., <code class="docutils literal notranslate"><span class="pre">gymnasium.make(&quot;CartPole-v1&quot;,</span> <span class="pre">render_mode=&quot;human&quot;)</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.rendering_enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rendering_enabled</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.rendering_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if rendering is enabled in the simulation environment.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>bool: True if rendering is enabled, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_motor_angles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_visualization_camera</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the robot’s position in the world or rebuild the sim world.</p>
+<p>The simulation world will be rebuilt if self._hard_reset is True.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>initial_motor_angles: A list of Floats. The desired joint angles after</dt><dd><p>reset. If None, the robot will use its built-in value.</p>
+</dd>
+<dt>reset_duration: Float. The time (in seconds) needed to rotate all motors</dt><dd><p>to the desired initial values.</p>
+</dd>
+<dt>reset_visualization_camera: Whether to reset debug visualization camera on</dt><dd><p>reset.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A numpy array contains the initial observation after reset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.robot">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">robot</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.robot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the robot instance currently being simulated in the environment.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Robot: The robot instance used in the simulation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.robot_class">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">robot_class</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.robot_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the robot class used in the environment.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>class: The class of the robot used in the environment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seeds the random number generator for the environment, ensuring reproducibility
+of the simulation results when a fixed seed is used.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>seed (int, optional): The seed for the random number generator. If None,</dt><dd><p>a random seed is used. Defaults to None.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>list of int: A list containing the actual seed used to initialize the</dt><dd><p>random number generator. This can be used to reproduce the
+same random sequences.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.sensor_by_name">
+<span class="sig-name descname"><span class="pre">sensor_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.sensor_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the sensor with the given name, or None if not exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.set_ground">
+<span class="sig-name descname"><span class="pre">set_ground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.set_ground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set simulation ground model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.set_time_step">
+<span class="sig-name descname"><span class="pre">set_time_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_action_repeat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.set_time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the time step of the environment.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>num_action_repeat: The number of simulation steps/action repeats to be</dt><dd><p>executed when calling env.step().</p>
+</dd>
+<dt>sim_step: The simulation time step in PyBullet. By default, the simulation</dt><dd><p>step is 0.001s, which is a good trade-off between simulation speed and
+accuracy.</p>
+</dd>
+</dl>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the num_action_repeat is less than 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step forward the simulation, given the action.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>action: Can be a list of desired motor angles for all motors when the</dt><dd><p>robot is in position control mode; A list of desired motor torques. Or a
+list of tuples (q, qdot, kp, kd, tau) for hybrid control mode. The
+action must be compatible with the robot’s motor control mode. Also, we
+are not going to use the leg space (swing/extension) definition at the
+gym level, since they are specific to Minitaur.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>observations: The observation dictionary. The keys are the sensor names</dt><dd><p>and the values are the sensor readings.</p>
+</dd>
+</dl>
+<p>reward: The reward for the current state-action pair.
+done: Whether the episode has ended.
+info: A dictionary that stores diagnostic information.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: The action dimension is not the same as the number of motors.
+ValueError: The magnitude of actions is out of bounds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.task">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current task associated with the environment.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>callable: The current task callable handling reward and termination logic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.world_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">world_dict</span></span><a class="headerlink" href="#motion_imitation.envs.locomotion_gym_env.LocomotionGymEnv.world_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a copy of the dictionary containing all major objects in the simulation world.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>dict: A copy of the dictionary of world objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">A2Perf</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Environment Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-motion_imitation.envs.locomotion_gym_env">Env Builder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="robots.html">Robot Modules</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to A2Perf’s documentation!</a></li>
+      <li>Next: <a href="robots.html" title="next chapter">Robot Modules</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2024.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/envs.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
