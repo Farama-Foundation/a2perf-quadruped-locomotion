@@ -180,6 +180,18 @@ class LocomotionGymEnv(gym.Env):
       self._robot.Terminate()
 
   def seed(self, seed=None):
+    """Seeds the random number generator for the environment, ensuring reproducibility
+    of the simulation results when a fixed seed is used.
+
+    Args:
+        seed (int, optional): The seed for the random number generator. If None,
+                              a random seed is used. Defaults to None.
+
+    Returns:
+        list of int: A list containing the actual seed used to initialize the
+                     random number generator. This can be used to reproduce the
+                     same random sequences.
+    """
     self.np_random, self.np_random_seed = seeding.np_random(seed)
     return [self.np_random_seed]
 
@@ -395,18 +407,38 @@ class LocomotionGymEnv(gym.Env):
 
   @property
   def rendering_enabled(self):
+    """Checks if rendering is enabled in the simulation environment.
+
+    Returns:
+        bool: True if rendering is enabled, False otherwise.
+    """
     return self._is_render
 
   @property
   def last_base_position(self):
+    """Gets the last recorded base position of the robot.
+
+    Returns:
+        tuple: The coordinates of the robot's base in the last step.
+    """
     return self._last_base_position
 
   @property
   def world_dict(self):
+    """Gets a copy of the dictionary containing all major objects in the simulation world.
+
+    Returns:
+        dict: A copy of the dictionary of world objects.
+    """
     return self._world_dict.copy()
 
   @world_dict.setter
   def world_dict(self, new_dict):
+    """Sets the dictionary containing all major objects in the simulation world.
+
+    Args:
+        new_dict (dict): A dictionary of world objects to replace the current one.
+    """
     self._world_dict = new_dict.copy()
 
   def _termination(self):
@@ -474,32 +506,79 @@ class LocomotionGymEnv(gym.Env):
 
   @property
   def pybullet_client(self):
+    """Gets the Bullet physics client used for the simulation.
+
+    This client handles all physics simulations and rendering for the environment.
+    It provides direct access to the PyBullet API, allowing for advanced manipulation
+    and configuration of the simulation parameters.
+
+    Returns:
+        BulletClient: The active PyBullet client instance.
+    """
     return self._pybullet_client
 
   @property
   def robot(self):
+    """Gets the robot instance currently being simulated in the environment.
+
+    Returns:
+        Robot: The robot instance used in the simulation.
+    """
     return self._robot
 
   @property
   def env_step_counter(self):
+    """Gets the number of steps that have been executed in the current environment since the last reset.
+    
+    Returns:
+        int: The current step count since the last reset.
+    """
     return self._env_step_counter
 
   @property
   def hard_reset(self):
+    """Gets the current state of the hard reset configuration for the environment.
+
+    When `hard_reset` is True, the simulation environment is completely rebuilt
+    at each reset, including reloading the physics engine and the robot model. 
+
+    Returns:
+        bool: The state indicating whether hard resets are enabled.
+    """
     return self._hard_reset
 
   @property
   def last_action(self):
+    """Gets the last action taken by the robot in the environment.
+
+    Returns:
+        numpy.array: The last action applied to the robot.
+    """
     return self._last_action
 
   @property
   def env_time_step(self):
+    """Gets the  environment time step.
+
+    Returns:
+        float: The current environment time step in seconds.
+    """
     return self._env_time_step
 
   @property
   def task(self):
+    """Gets the current task associated with the environment.
+
+    Returns:
+        callable: The current task callable handling reward and termination logic.
+    """
     return self._task
 
   @property
   def robot_class(self):
+    """Gets the robot class used in the environment.
+
+    Returns:
+        class: The class of the robot used in the environment.
+    """
     return self._robot_class

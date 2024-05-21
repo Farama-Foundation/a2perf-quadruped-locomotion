@@ -239,6 +239,12 @@ class Minitaur(object):
         self.ReceiveObservation()
 
     def GetTimeSinceReset(self):
+        """
+        Calculates the total simulation time since the last reset.
+
+        Returns:
+            float: The time elapsed since the last reset, in simulation time units.
+        """
         return self._step_counter * self.time_step
 
     def _StepInternal(self, action, motor_control_mode):
@@ -512,6 +518,11 @@ class Minitaur(object):
                                        desired_angle)
 
     def GetURDFFile(self):
+        """Specifies the path to the URDF file used for the robot.
+
+        Returns:
+            str: Relative path to the URDF file for the robot.
+        """
         return "quadruped/minitaur.urdf"
 
     def ResetPose(self, add_constraint):
@@ -1123,6 +1134,11 @@ class Minitaur(object):
                                                  restitution=foot_restitution)
 
     def SetJointFriction(self, joint_frictions):
+        """Sets the friction at each knee joint specified.
+
+        Args:
+            joint_frictions (list[float]): List of friction values for each knee joint.
+        """
         for knee_joint_id, friction in zip(self._foot_link_ids, joint_frictions):
             self._pybullet_client.setJointMotorControl2(
                     bodyIndex=self.quadruped,
@@ -1132,15 +1148,36 @@ class Minitaur(object):
                     force=friction)
 
     def GetNumKneeJoints(self):
+        """Retrieves the number of knee joints in the robot.
+
+        Returns:
+            int: The number of knee joints in the robot.
+        """
         return len(self._foot_link_ids)
 
     def SetBatteryVoltage(self, voltage):
+        """Sets the voltage for the robot's motors.
+
+        Args:
+            voltage (float): The voltage to set for the motor model.
+        """
         self._motor_model.set_voltage(voltage)
 
     def SetMotorViscousDamping(self, viscous_damping):
+        """
+        Sets the viscous damping for the robot's motors.
+
+        Args:
+            viscous_damping (float): The viscous damping coefficient to apply to the motors.
+        """
         self._motor_model.set_viscous_damping(viscous_damping)
 
     def GetTrueObservation(self):
+        """Compiles a comprehensive list of the robot's true current state without any sensor noise.
+
+        Returns:
+            list: Current true state observations including motor angles, velocities, torques, base orientation, and base roll-pitch-yaw rates.
+        """
         observation = []
         observation.extend(self.GetTrueMotorAngles())
         observation.extend(self.GetTrueMotorVelocities())
@@ -1338,6 +1375,11 @@ class Minitaur(object):
 
     @property
     def chassis_link_ids(self):
+        """Gets the IDs of the chassis links from the robot's URDF.
+
+        Returns:
+            list[int]: List of chassis link IDs.
+        """
         return self._chassis_link_ids
 
     def SetAllSensors(self, sensors):
@@ -1376,10 +1418,20 @@ class Minitaur(object):
 
     @property
     def is_safe(self):
+        """Checks if the robot is in a 'safe' state.
+
+        Returns:
+            bool: True if the robot is in a safe state, False otherwise.
+        """
         return self._is_safe
 
     @property
     def last_action(self):
+        """Retrieves the last action applied to the robot.
+
+        Returns:
+            numpy.array: The last set of motor commands sent to the robot.
+        """
         return self._last_action
 
     def ProcessAction(self, action, substep_count):
@@ -1424,10 +1476,21 @@ class Minitaur(object):
 
     @property
     def pybullet_client(self):
+        """Provides access to the PyBullet client associated with this robot instance.
+
+        Returns:
+            BulletClient: The PyBullet client used for the simulation.
+        """
         return self._pybullet_client
 
     @property
     def joint_states(self):
+        """
+        Retrieves the current joint states of the robot.
+
+        Returns:
+            list: The state of each joint, including position, velocity, and torque.
+        """
         return self._joint_states
 
     @classmethod
