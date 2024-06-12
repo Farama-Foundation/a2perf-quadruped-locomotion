@@ -23,6 +23,7 @@ class ObservationDictionaryToArrayWrapper(gym.Env):
     """Initializes the wrapper."""
     self.observation_excluded = observation_excluded
     self._gym_env = gym_env
+    self.metadata = gym_env.metadata
     self.observation_space = self._flatten_observation_spaces(
         self._gym_env.observation_space)
     self.action_space = self._gym_env.action_space

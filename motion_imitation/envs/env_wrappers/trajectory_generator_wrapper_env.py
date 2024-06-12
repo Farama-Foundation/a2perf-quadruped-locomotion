@@ -45,7 +45,7 @@ class TrajectoryGeneratorWrapperEnv(object):
       )
 
     self._trajectory_generator = trajectory_generator
-
+    self.metadata = gym_env.metadata
     # The trajectory generator can subsume the action/observation space.
     if hasattr(trajectory_generator, 'observation_space'):
       self.observation_space = self._trajectory_generator.observation_space
