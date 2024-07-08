@@ -1,3 +1,10 @@
+# ⚠️ IMPORTANT NOTICE ⚠️
+
+This is a submodule of the A2Perf project. For complete documentation and usage
+instructions, please refer to the main **A2Perf README**.
+
+---
+
 # Motion Imitation
 
 Further development (new features, bug fixes etc) happen in the master branch.
@@ -166,4 +173,3 @@ Some MPC parts for A1 and running on real A1 are written by Yuxiang Yang, a form
 ---
 
 *Disclaimer: This is not an official Google product.*
-
