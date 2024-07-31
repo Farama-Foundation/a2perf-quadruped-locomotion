@@ -36,6 +36,13 @@ from a2perf.domains.quadruped_locomotion.motion_imitation.robots import robot_co
 from a2perf.domains.quadruped_locomotion.motion_imitation.robots import action_filter
 from a2perf.domains.quadruped_locomotion.motion_imitation.robots import kinematics
 
+import sys
+
+if sys.version_info < (3, 10):
+    from collections import Sequence
+else:
+    from collections.abc import Sequence
+
 INIT_POSITION = [0, 0, .2]
 INIT_RACK_POSITION = [0, 0, 1]
 INIT_ORIENTATION = [0, 0, 0, 1]
