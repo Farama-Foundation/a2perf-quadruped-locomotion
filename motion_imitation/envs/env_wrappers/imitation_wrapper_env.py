@@ -20,11 +20,12 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
+import gymnasium as gym
 
 from a2perf.domains.quadruped_locomotion.motion_imitation.envs import gym_spaces
 
 
-class ImitationWrapperEnv(object):
+class ImitationWrapperEnv(gym.Wrapper):
   """An env using for training policy with motion imitation."""
 
   def __init__(self,

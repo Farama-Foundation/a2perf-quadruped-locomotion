@@ -19,7 +19,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-class TrajectoryGeneratorWrapperEnv(object):
+import gymnasium as gym
+
+class TrajectoryGeneratorWrapperEnv(gym.Wrapper):
   """A wrapped LocomotionGymEnv with a built-in trajectory generator."""
 
   def __init__(self, gym_env, trajectory_generator):
