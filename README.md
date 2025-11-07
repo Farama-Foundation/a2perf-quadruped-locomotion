@@ -1,4 +1,4 @@
-# ⚠️ IMPORTANT NOTICE ⚠️
+**Nov 7, 2025: This project has been deprecated due to a lack of widespread community use, and is no longer planned to receive any additional updates or support.**
 
 This is a submodule of the A2Perf project. For complete documentation and usage
 instructions, please refer to the main **A2Perf README**.
